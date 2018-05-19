@@ -2,15 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
-
-
-    [SerializeField]
-    private float movementSpeed;
-
-    private bool facingRight;
-
-    private Animator myAnimator;
+public class PlayerController : CharacterController
+{
 
     [SerializeField]
     private Transform[] groundPoints;
@@ -24,14 +17,10 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float jumpForce;
 
-    [SerializeField]
-    private GameObject KnifePrefab;
-
-    [SerializeField]
-    private Transform KnifePos;
+    private Vector2 startPos;
 
     public Rigidbody2D MyRigidBody { get; set; }
-    public bool Attack { get; set; }
+   
     public bool Slide { get; set; }
     public bool Jump { get; set; }
     public bool OnGround { get; set; }
@@ -54,17 +43,26 @@ public class PlayerController : MonoBehaviour {
     private LayerMask whatIsGround;
 
 	// Use this for initialization
-	void Start () {
-        facingRight = true;
+	public override void Start () {
+
+        startPos = transform.position;
+
+        base.Start();
 
         //Reference to myrigidBody of the player
         MyRigidBody = GetComponent<Rigidbody2D>();
 
-        myAnimator = GetComponent<Animator>();
+        
 
     }
 
     void Update(){
+
+        //if(transform.position.y <= -14f)
+        //{
+        //    MyRigidBody.velocity = Vector2.zero;
+        //    transform.position = startPos;
+        //}
         HandleInput();
     }
 	
@@ -111,18 +109,14 @@ public class PlayerController : MonoBehaviour {
             myAnimator.SetTrigger("slide");
         }
 
-        if (Input.GetKeyDown(KeyCode.V))
-        {
+        if (Input.GetKeyDown(KeyCode.V)) {
             myAnimator.SetTrigger("throw");
         }
 
     }
     private void Flip(float horizontal){
         if(horizontal > 0 && !facingRight || horizontal < 0 && facingRight){
-            facingRight = !facingRight;
-            Vector3 theScale = transform.localScale;
-            theScale.x *= -1;
-            transform.localScale = theScale;
+            ChangeDirection();
         }
     }
 
@@ -152,18 +146,9 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    public void ThrowKnife(int value){
-        if (!OnGround && value == 1 || OnGround && value == 0)
-        {
-
-            if (facingRight) {
-                GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, -90)));
-                tmp.GetComponent<Knife>().Initialize(Vector2.right);
-            }
-            else {
-                GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, 90)));
-                tmp.GetComponent<Knife>().Initialize(Vector2.left);
-            }
+    public override void ThrowKnife(int value){
+        if (!OnGround && value == 1 || OnGround && value == 0){
+            base.ThrowKnife(value);
         }
     }
 }
