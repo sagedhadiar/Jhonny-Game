@@ -82,7 +82,7 @@ public class PlayerController : CharacterController
 
     private void HandleMovement(float horizontal){
         if(MyRigidBody.velocity.y < 0){
-            myAnimator.SetBool("land", true);
+            MyAnimator.SetBool("land", true);
         }
 
         if(!Attack && !Slide && (OnGround || airControl)){
@@ -93,24 +93,24 @@ public class PlayerController : CharacterController
             MyRigidBody.AddForce(new Vector2(0, jumpForce));
         }
 
-        myAnimator.SetFloat("speed", Mathf.Abs(horizontal));
+        MyAnimator.SetFloat("speed", Mathf.Abs(horizontal));
     }
 
     private void HandleInput(){
         if (Input.GetKeyDown(KeyCode.Space)){
-            myAnimator.SetTrigger("jump");
+            MyAnimator.SetTrigger("jump");
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift)){
-            myAnimator.SetTrigger("attack");
+            MyAnimator.SetTrigger("attack");
         }
 
         if (Input.GetKeyDown(KeyCode.LeftControl)){
-            myAnimator.SetTrigger("slide");
+            MyAnimator.SetTrigger("slide");
         }
 
         if (Input.GetKeyDown(KeyCode.V)) {
-            myAnimator.SetTrigger("throw");
+            MyAnimator.SetTrigger("throw");
         }
 
     }
@@ -139,10 +139,10 @@ public class PlayerController : CharacterController
     //used for jump Animation
     private void HandleLayers(){
         if (!OnGround){
-            myAnimator.SetLayerWeight(1, 1);
+            MyAnimator.SetLayerWeight(1, 1);
         }
         else{
-            myAnimator.SetLayerWeight(1, 0);
+            MyAnimator.SetLayerWeight(1, 0);
         }
     }
 

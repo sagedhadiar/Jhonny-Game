@@ -4,8 +4,6 @@ using UnityEngine;
 
 public abstract class CharacterController : MonoBehaviour {
 
-    protected Animator myAnimator;
-
     [SerializeField]
     protected Transform KnifePos;
 
@@ -18,14 +16,15 @@ public abstract class CharacterController : MonoBehaviour {
     protected bool facingRight;
 
     public bool Attack { get; set; }
-    
+
+    public Animator MyAnimator { get; private set; }
 
     // Use this for initialization
     public virtual void Start () {
 
         facingRight = true;
 
-        myAnimator = GetComponent<Animator>();
+        MyAnimator = GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
