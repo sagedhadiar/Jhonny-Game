@@ -38,6 +38,13 @@ public class PlayerController : CharacterController
         }
     }
 
+    public override bool isDead {
+        get
+        {
+            return health <= 0;
+        }
+    }
+
     //Determine what ground is because some wil not be considered as ground
     [SerializeField]
     private LayerMask whatIsGround;
@@ -150,5 +157,10 @@ public class PlayerController : CharacterController
         if (!OnGround && value == 1 || OnGround && value == 0){
             base.ThrowKnife(value);
         }
+    }
+
+    public override IEnumerator TakeDamage()
+    {
+        yield return null;
     }
 }

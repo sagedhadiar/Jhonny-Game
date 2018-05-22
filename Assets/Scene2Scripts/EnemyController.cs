@@ -35,6 +35,14 @@ public class EnemyController : CharacterController {
         }
     }
 
+    public override bool isDead {
+        get
+        {
+            return health <= 0;
+        }
+           
+    }
+
     // Use this for initialization
     public override void Start() {
 
@@ -46,9 +54,15 @@ public class EnemyController : CharacterController {
     // Update is called once per frame
     void Update () {
 
-        currentState.Execute();
+        // If is not dead then we execute the current state and lookAtTarget
+        if (!isDead) {
 
-        LookAtTarget();
+            //making sure if take a damage then he can trun arround if the player jump on the other side
+            if (!TakingDamage) {
+                currentState.Execute();
+            }
+            LookAtTarget();
+        }
 
     }
 
@@ -92,8 +106,22 @@ public class EnemyController : CharacterController {
         return facingRight ? Vector2.right : Vector2.left;
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
+    public override void OnTriggerEnter2D(Collider2D other) {
+
+        base.OnTriggerEnter2D(other);
         currentState.OnTriggerEnter(other);
     }
 
+    public override IEnumerator TakeDamage() {
+
+        health -= 10;
+
+        if (!isDead) {
+            MyAnimator.SetTrigger("damage");
+        }
+        else {
+            MyAnimator.SetTrigger("death");
+            yield return null;
+        }
+    }
 }

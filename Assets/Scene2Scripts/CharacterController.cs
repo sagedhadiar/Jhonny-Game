@@ -17,6 +17,13 @@ public abstract class CharacterController : MonoBehaviour {
 
     public bool Attack { get; set; }
 
+    public bool TakingDamage {get; set;}
+
+    [SerializeField]
+    protected int health; 
+
+    public abstract bool isDead { get; }
+
     public Animator MyAnimator { get; private set; }
 
     // Use this for initialization
@@ -31,6 +38,8 @@ public abstract class CharacterController : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public abstract IEnumerator TakeDamage();
 
     public void ChangeDirection(){
         facingRight = !facingRight;
@@ -47,4 +56,15 @@ public abstract class CharacterController : MonoBehaviour {
             tmp.GetComponent<Knife>().Initialize(Vector2.left);
         }
     }
+
+    public virtual void OnTriggerEnter2D(Collider2D other) {
+
+        if(other.tag == "PlayerKnife") {
+            StartCoroutine(TakeDamage());
+        }
+
+    }
+
+    
+
 }
