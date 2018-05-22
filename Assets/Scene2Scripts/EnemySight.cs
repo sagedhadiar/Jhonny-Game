@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemeySight : MonoBehaviour {
+public class EnemySight : MonoBehaviour {
 
     [SerializeField]
     private EnemyController enemy;
 	// Use this for initialization
 
 	void OnTriggerEnter2D(Collider2D other) {
+        
         if(other.tag == "jhonny") {
             enemy.Target = other.gameObject;
         }

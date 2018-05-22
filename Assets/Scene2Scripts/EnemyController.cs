@@ -8,6 +8,33 @@ public class EnemyController : CharacterController {
 
     public GameObject Target { get; set; }
 
+    [SerializeField]
+    private float meleeRange;
+
+    [SerializeField]
+    private float throwRange;
+
+    public bool InMeleeRange
+    {
+        get
+        {
+            if (Target != null)
+            {
+                return Vector2.Distance(transform.position, Target.transform.position) <= throwRange;
+            }
+            return false;
+        }
+    }
+
+    public bool InThrowRange {
+        get {
+            if(Target != null) {
+                return Vector2.Distance(transform.position, Target.transform.position) <= meleeRange;
+            }
+            return false;
+        }
+    }
+
     // Use this for initialization
     public override void Start() {
 
@@ -31,6 +58,8 @@ public class EnemyController : CharacterController {
             //Get direction >0 or <0 
             //if <0 then on the left of me
             //if >0 then on the right of me
+            // Target.transform.position.x is the position of the player
+            // transform.position.x is the position of the enemy
             float xDir = Target.transform.position.x - transform.position.x;
 
             if (xDir < 0 && facingRight || xDir > 0 && !facingRight) {
@@ -50,9 +79,13 @@ public class EnemyController : CharacterController {
     }
 
     public void Move() {
-        MyAnimator.SetFloat("speed", 1);
 
-        transform.Translate(GetDirection() * (movementSpeed * Time.deltaTime));
+        if (!Attack) {
+            MyAnimator.SetFloat("speed", 1);
+
+            transform.Translate(GetDirection() * (movementSpeed * Time.deltaTime));
+        }
+       
     }
 
     public Vector2 GetDirection() {
