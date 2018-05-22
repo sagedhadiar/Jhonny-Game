@@ -14,6 +14,7 @@ public class AttackBehaviour : StateMachineBehaviour{
         if (animator.tag == "jhonny")  {
 
             if (PlayerController.Instance.OnGround) {
+
                 PlayerController.Instance.MyRigidBody.velocity = Vector2.zero;
             }
         }

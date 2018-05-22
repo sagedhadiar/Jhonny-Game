@@ -37,14 +37,16 @@ public class RangedState : IEnemyState {
     }
 
     private void ThrowKnife() {
+
         throwTimer += Time.deltaTime;
 
-        if(throwTimer >= throwCoolDown) {
+        if (throwTimer >= throwCoolDown) {
             canThrow = true;
             throwTimer = 0;
         }
 
         if (canThrow) {
+
             canThrow = false;
             enemy.MyAnimator.SetTrigger("throw");
         }

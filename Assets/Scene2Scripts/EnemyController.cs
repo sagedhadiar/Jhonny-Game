@@ -20,7 +20,7 @@ public class EnemyController : CharacterController {
         {
             if (Target != null)
             {
-                return Vector2.Distance(transform.position, Target.transform.position) <= throwRange;
+                return Vector2.Distance(transform.position, Target.transform.position) <= meleeRange; 
             }
             return false;
         }
@@ -29,7 +29,7 @@ public class EnemyController : CharacterController {
     public bool InThrowRange {
         get {
             if(Target != null) {
-                return Vector2.Distance(transform.position, Target.transform.position) <= meleeRange;
+                return Vector2.Distance(transform.position, Target.transform.position) <= throwRange;
             }
             return false;
         }

@@ -18,9 +18,9 @@ public class PatrolState : IEnemyState
         Patrol();
 
         enemy.Move();
-
+        
         //If the enemy have a target and inThrowRange then throw else keep Patrolling
-        if(enemy.Target != null && enemy.InThrowRange) { 
+        if(enemy.Target != null && enemy.InThrowRange) {
             enemy.ChangeState(new RangedState());
         }
     }
