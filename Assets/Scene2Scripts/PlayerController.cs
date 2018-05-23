@@ -64,27 +64,36 @@ public class PlayerController : CharacterController
     }
 
     void Update(){
+        
+        //after death the player can not move
+        if (!TakingDamage && !isDead) {
 
-        //if(transform.position.y <= -14f)
-        //{
-        //    MyRigidBody.velocity = Vector2.zero;
-        //    transform.position = startPos;
-        //}
-        HandleInput();
+            //if(transform.position.y <= -14f)
+            //{
+            //    MyRigidBody.velocity = Vector2.zero;
+            //    transform.position = startPos;
+            //}
+
+            HandleInput();
+        } 
     }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        //return 0 or 1
-        float horizontal = Input.GetAxis("Horizontal");
+        //after death the player can not move
+        if (!TakingDamage && !isDead) {
 
-        OnGround = IsGrounded();
+            //return 0 or 1
+            float horizontal = Input.GetAxis("Horizontal");
 
-        HandleMovement(horizontal);
+            OnGround = IsGrounded();
 
-        Flip(horizontal);
+            HandleMovement(horizontal);
 
-        HandleLayers();
+            Flip(horizontal);
+
+            HandleLayers();
+        }
     }
 
     private void HandleMovement(float horizontal){
@@ -159,8 +168,16 @@ public class PlayerController : CharacterController
         }
     }
 
-    public override IEnumerator TakeDamage()
-    {
+    public override IEnumerator TakeDamage() {
+        health -= 10;
+
+        if (!isDead) {
+            MyAnimator.SetTrigger("damage");
+        }
+        else  {
+            MyAnimator.SetLayerWeight(1, 0);
+            MyAnimator.SetTrigger("death");
+        }
         yield return null;
     }
 }

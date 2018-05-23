@@ -23,7 +23,7 @@ public abstract class CharacterController : MonoBehaviour {
     protected int health;
 
     [SerializeField]
-    private EdgeCollider2D SwordCollider;
+    private EdgeCollider2D swordCollider;
 
     [SerializeField]
     private List<string> damageSources;
@@ -31,6 +31,12 @@ public abstract class CharacterController : MonoBehaviour {
     public abstract bool isDead { get; }
 
     public Animator MyAnimator { get; private set; }
+    public EdgeCollider2D SwordCollider {
+        get
+        {
+            return swordCollider;
+        }
+    }
 
     // Use this for initialization
     public virtual void Start() {
@@ -64,7 +70,7 @@ public abstract class CharacterController : MonoBehaviour {
     }
 
     public void MeleeAttack() {
-        SwordCollider.enabled = !SwordCollider.enabled;
+        SwordCollider.enabled = true;
 
     }
 
