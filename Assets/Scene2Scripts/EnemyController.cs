@@ -48,6 +48,8 @@ public class EnemyController : CharacterController {
 
         base.Start();
 
+        PlayerController.Instance.Dead += new DeadEventHandler(RemoveTarget);
+
         ChangeState(new IdleState());
     }
 
@@ -64,6 +66,13 @@ public class EnemyController : CharacterController {
             LookAtTarget();
         }
 
+    }
+
+    //AFter killing the player let the enemy return to patrol state
+    public void RemoveTarget() {
+        Target = null;
+
+        ChangeState(new PatrolState());
     }
 
     void LookAtTarget() {
