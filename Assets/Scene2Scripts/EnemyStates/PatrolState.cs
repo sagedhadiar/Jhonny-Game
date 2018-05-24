@@ -8,9 +8,10 @@ public class PatrolState : IEnemyState
 
     private float patrolTimer;
 
-    private float patrolDuration = 10f;
+    private float patrolDuration ;
 
     public void Enter(EnemyController enemy) {
+        patrolDuration = UnityEngine.Random.Range(6, 10);
         this.enemy = enemy;
     }
 

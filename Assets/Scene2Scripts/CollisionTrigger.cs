@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class CollisionTrigger : MonoBehaviour {
 
-    private BoxCollider2D playerCollider;
-
     [SerializeField]
     private BoxCollider2D platformCollider;
 
+    //Platform Collider
     [SerializeField]
     private BoxCollider2D platformTrigger;
     // Use this for initialization
     void Start() {
-        playerCollider = GameObject.Find("jhonny").GetComponent<BoxCollider2D>();
         Physics2D.IgnoreCollision(platformCollider, platformTrigger, true);
     }
 
@@ -22,20 +20,27 @@ public class CollisionTrigger : MonoBehaviour {
 
     }
 
+    //If it collides with something
     void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.name == "jhonny")  {
+
+        //If the player collides with platform
+        if (other.gameObject.tag == "jhonny" || other.gameObject.name == "Enemy") {
+
+            //Then ignore collision
             //Ignore the collision between the 2 colliders when the player
             // Enters the collision
-            Physics2D.IgnoreCollision(platformCollider, playerCollider, true);
+            Physics2D.IgnoreCollision(platformCollider, other, true);
         }
     }
 
+    //When a trigger collision stops
     void OnTriggerExit2D(Collider2D other) {
-        if (other.gameObject.name == "jhonny")
-        {
+
+        //If the player stop colliding 
+        if (other.gameObject.tag == "jhonny" || other.gameObject.name == "Enemy") {
             //Ignore the collision between the 2 colliders when the player
             // Enters the collision
-            Physics2D.IgnoreCollision(platformCollider, playerCollider, false);
+            Physics2D.IgnoreCollision(platformCollider, other, false);
         }
     }
 }

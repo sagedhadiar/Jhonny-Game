@@ -79,7 +79,7 @@ public class PlayerController : CharacterController
         //after death the player can not move
         if (!TakingDamage && !IsDead) {
 
-            if (transform.position.y <= -14f)  { 
+            if (transform.position.y <= -25f)  { 
                 Death();
             }
 
@@ -107,7 +107,8 @@ public class PlayerController : CharacterController
 
     public void OnDead() {
 
-        if (Dead != null) {
+        if (Dead != null)
+        {
             Dead();
         }
 
