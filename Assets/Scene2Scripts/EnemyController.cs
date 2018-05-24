@@ -51,7 +51,7 @@ public class EnemyController : CharacterController {
     }
 
     //Indicates if the enemy is dead
-    public override bool isDead {
+    public override bool IsDead {
         get
         {
             return health <= 0;
@@ -79,7 +79,7 @@ public class EnemyController : CharacterController {
 
         // If is not dead then we execute the current state and lookAtTarget
         //If the enemy is alive
-        if (!isDead) {
+        if (!IsDead) {
 
             //making sure if take a damage then he can trun arround if the player jump on the other side
             //if we are not taking damage
@@ -187,7 +187,7 @@ public class EnemyController : CharacterController {
         health -= 10;
 
         //if the enemy is not dead then play the enemy-damage animation
-        if (!isDead) {
+        if (!IsDead) {
             MyAnimator.SetTrigger("damage");
         }
         else {

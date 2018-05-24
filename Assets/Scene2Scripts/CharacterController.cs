@@ -30,7 +30,7 @@ public abstract class CharacterController : MonoBehaviour {
     [SerializeField]
     private List<string> damageSources;
 
-    public abstract bool isDead { get; }
+    public abstract bool IsDead { get; }
 
     [SerializeField]
     private string knifeTag;

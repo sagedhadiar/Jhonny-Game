@@ -47,7 +47,7 @@ public class PlayerController : CharacterController
     public bool Jump { get; set; }
     public bool OnGround { get; set; }
 
-    public override bool isDead {
+    public override bool IsDead {
         get
         {
             if (health <= 0) { 
@@ -77,7 +77,7 @@ public class PlayerController : CharacterController
     void Update(){
         
         //after death the player can not move
-        if (!TakingDamage && !isDead) {
+        if (!TakingDamage && !IsDead) {
 
             if (transform.position.y <= -14f)  { 
                 Death();
@@ -90,7 +90,7 @@ public class PlayerController : CharacterController
 	// Update is called once per frame
 	void FixedUpdate () {
         //after death the player can not move
-        if (!TakingDamage && !isDead) {
+        if (!TakingDamage && !IsDead) {
 
             //return 0 or 1
             float horizontal = Input.GetAxis("Horizontal");
@@ -209,7 +209,7 @@ public class PlayerController : CharacterController
         if (!immortal) {
             health -= 10;
 
-            if (!isDead)  {
+            if (!IsDead)  {
                 MyAnimator.SetTrigger("damage");
 
                 immortal = true;
