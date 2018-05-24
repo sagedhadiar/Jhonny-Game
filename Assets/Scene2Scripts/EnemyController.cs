@@ -111,20 +111,27 @@ public class EnemyController : CharacterController {
        
     }
 
+    //Get the current direction
     public Vector2 GetDirection() {
         return facingRight ? Vector2.right : Vector2.left;
     }
 
+    //If the enemy collides with an object
     public override void OnTriggerEnter2D(Collider2D other) {
 
+        //calls the base on trigger enter
         base.OnTriggerEnter2D(other);
+
+        //Calls OnTriggerEnter on the current state
         currentState.OnTriggerEnter(other);
     }
 
+    //Makes the enemy takes damage
     public override IEnumerator TakeDamage() {
 
         health -= 10;
 
+        //if the enemy is not dead then play the enemy-damage animation
         if (!isDead) {
             MyAnimator.SetTrigger("damage");
         }
@@ -139,4 +146,17 @@ public class EnemyController : CharacterController {
         Destroy(gameObject);
         
     }
+
+
+    //If we want to make the enemy respawn after a certain of time we can call this method instead of the upper method
+    //public override void Death() {
+
+    //    MyAnimator.ResetTrigger("death");
+
+    //    MyAnimator.SetTrigger("idle");
+
+    //    health = 30;
+
+    //    transform.position = startPos;
+    //}
 }

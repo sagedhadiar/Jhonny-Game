@@ -8,7 +8,7 @@ public class IdleState : IEnemyState
 
     private float idleTimer;
 
-    private float idleDuration = 10f;
+    private float idleDuration = 10;
 
     public void Enter(EnemyController enemy) {
         this.enemy = enemy;
@@ -27,7 +27,14 @@ public class IdleState : IEnemyState
     public void Exit() {
     }
 
+    //When the player hits the enemy in the idlestate then the enemy we go partrol state then ranged state 
+    //towards the player to attack him
     public void OnTriggerEnter(Collider2D other) {
+        if(other.tag == "PlayerKnife") {
+
+            enemy.Target = PlayerController.Instance.gameObject;
+
+        }
     }
 
     private void Idle() {

@@ -32,6 +32,15 @@ public abstract class CharacterController : MonoBehaviour {
 
     public abstract bool isDead { get; }
 
+    [SerializeField]
+    private string knifeTag;
+
+    // Give the right position -->
+    private int KnifeRightDirection;
+
+    //Give the left position <--
+    private int KnifeLeftDirection;
+
     public Animator MyAnimator { get; private set; }
     public EdgeCollider2D SwordCollider {
         get
@@ -46,6 +55,15 @@ public abstract class CharacterController : MonoBehaviour {
         facingRight = true;
 
         MyAnimator = GetComponent<Animator>();
+
+        if (knifeTag == "PlayerKnife") {
+            KnifeRightDirection = -90;
+            KnifeLeftDirection = 90;
+        }
+        else {
+            KnifeRightDirection = 0;
+            KnifeLeftDirection = 180;
+        }
     }
 
     // Update is called once per frame
@@ -62,11 +80,11 @@ public abstract class CharacterController : MonoBehaviour {
 
     public virtual void ThrowKnife(int value) {
         if (facingRight) {
-            GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, -90)));
+            GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, KnifeRightDirection)));
             tmp.GetComponent<Knife>().Initialize(Vector2.right);
         }
         else {
-            GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, 90)));
+            GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, KnifeLeftDirection)));
             tmp.GetComponent<Knife>().Initialize(Vector2.left);
         }
     }
