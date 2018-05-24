@@ -4,16 +4,30 @@ using UnityEngine;
 
 public class EnemyController : CharacterController {
 
+    //The enemy's current state
+    //changing this will change the enemys behaviour
     private IEnemyState currentState;
 
+    //The enemy's target
     public GameObject Target { get; set; }
 
+    //The enemy's melee range, at what range does the enemy need to use the sword
     [SerializeField]
     private float meleeRange;
 
+    // The enemy's throw range, how far can it start throwing knifes
     [SerializeField]
     private float throwRange;
 
+    private Vector3 startPos;
+
+    [SerializeField]
+    private Transform leftEdge;
+
+    [SerializeField]
+    private Transform rightEdge;
+
+    //Indicates if the enemy is in melee range
     public bool InMeleeRange
     {
         get
@@ -26,6 +40,7 @@ public class EnemyController : CharacterController {
         }
     }
 
+    //Indicates if the enemy is in throw range
     public bool InThrowRange {
         get {
             if(Target != null) {
@@ -35,6 +50,7 @@ public class EnemyController : CharacterController {
         }
     }
 
+    //Indicates if the enemy is dead
     public override bool isDead {
         get
         {
@@ -46,10 +62,15 @@ public class EnemyController : CharacterController {
     // Use this for initialization
     public override void Start() {
 
+        //this.startPos = transform.position;
+
+        //Calls the base start
         base.Start();
 
+        //Makes the RemoveTarget function listen to the player's Dead Event
         PlayerController.Instance.Dead += new DeadEventHandler(RemoveTarget);
 
+        //Sets the enemy in idle state
         ChangeState(new IdleState());
     }
 
@@ -57,61 +78,95 @@ public class EnemyController : CharacterController {
     void Update () {
 
         // If is not dead then we execute the current state and lookAtTarget
+        //If the enemy is alive
         if (!isDead) {
 
             //making sure if take a damage then he can trun arround if the player jump on the other side
+            //if we are not taking damage
             if (!TakingDamage) {
+
+                //Execute the current state, this can make the enemy move or attack ...
                 currentState.Execute();
             }
+
+            //Make the enemy look at his target
             LookAtTarget();
         }
 
     }
 
-    //AFter killing the player let the enemy return to patrol state
+    //After killing the player let the enemy return to patrol state
+    //Removes the enemy's target
     public void RemoveTarget() {
+
+        //Removes the target
         Target = null;
 
+        //Changes the state to a patrol state
         ChangeState(new PatrolState());
     }
 
+    //Makes the enemy look at the target
     void LookAtTarget() {
-
+        //If we have target
         if (Target != null) {
-            //Get direction >0 or <0 
+
+            //Calculate the direction
             //if <0 then on the left of me
             //if >0 then on the right of me
             // Target.transform.position.x is the position of the player
             // transform.position.x is the position of the enemy
             float xDir = Target.transform.position.x - transform.position.x;
 
+            //If we are turning the wromg way
             if (xDir < 0 && facingRight || xDir > 0 && !facingRight) {
+
+                //look in the right direction
                 ChangeDirection();
             }
         }
     }
 
+    //Changes the enemy's state
     public void ChangeState(IEnemyState newState) {
+
+        //If we have a current state
         if(currentState != null) {
+
+            //Call the exit function on the state
             currentState.Exit();
         }
 
+        //Sets the current state as the new State
         currentState = newState;
 
+        //Calls the enter function on the current state
         currentState.Enter(this);
     }
 
+    //Moves the enemy
     public void Move() {
 
+        //If the enemy is not attacking
         if (!Attack) {
-            MyAnimator.SetFloat("speed", 1);
 
-            transform.Translate(GetDirection() * (movementSpeed * Time.deltaTime));
+            //in order the enemy does get out of the platform while following the player
+            if ((GetDirection().x > 0 && transform.position.x < rightEdge.position.x) || (GetDirection().x < 0 && transform.position.x > leftEdge.position.x) ){
+
+                //Sets the speed to 1 to the player the run animation
+                MyAnimator.SetFloat("speed", 1);
+
+                //Moves the enemy in the correct direction
+                transform.Translate(GetDirection() * (movementSpeed * Time.deltaTime));
+            }
+            else if (currentState is PatrolState) {
+                ChangeDirection();
+            }
         }
        
     }
 
-    //Get the current direction
+    //Gets the current direction
     public Vector2 GetDirection() {
         return facingRight ? Vector2.right : Vector2.left;
     }

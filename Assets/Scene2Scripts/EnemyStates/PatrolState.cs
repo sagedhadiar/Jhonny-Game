@@ -29,10 +29,7 @@ public class PatrolState : IEnemyState
     }
 
     public void OnTriggerEnter(Collider2D other) {
-        if (other.tag == "Edge") {
-            enemy.ChangeDirection();
-        }
-
+       
         if (other.tag == "PlayerKnife") { 
             enemy.Target = PlayerController.Instance.gameObject; 
         }

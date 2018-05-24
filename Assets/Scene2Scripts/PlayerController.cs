@@ -39,7 +39,7 @@ public class PlayerController : CharacterController
 
     private SpriteRenderer spriteRenderer;
 
-    private Vector2 startPos;
+    private Vector3 startPos;
 
     public Rigidbody2D MyRigidBody { get; set; }
    
