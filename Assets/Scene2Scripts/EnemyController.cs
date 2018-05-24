@@ -133,4 +133,10 @@ public class EnemyController : CharacterController {
             yield return null;
         }
     }
+
+    public override void Death() {
+
+        Destroy(gameObject);
+        
+    }
 }

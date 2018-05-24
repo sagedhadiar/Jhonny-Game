@@ -19,6 +19,8 @@ public abstract class CharacterController : MonoBehaviour {
 
     public bool TakingDamage { get; set; }
 
+    public abstract void Death();
+
     [SerializeField]
     protected int health;
 

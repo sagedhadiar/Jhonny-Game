@@ -79,11 +79,9 @@ public class PlayerController : CharacterController
         //after death the player can not move
         if (!TakingDamage && !isDead) {
 
-            //if(transform.position.y <= -14f)
-            //{
-            //    MyRigidBody.velocity = Vector2.zero;
-            //    transform.position = startPos;
-            //}
+            if (transform.position.y <= -14f)  { 
+                Death();
+            }
 
             HandleInput();
         } 
@@ -211,8 +209,7 @@ public class PlayerController : CharacterController
         if (!immortal) {
             health -= 10;
 
-            if (!isDead)
-            {
+            if (!isDead)  {
                 MyAnimator.SetTrigger("damage");
 
                 immortal = true;
@@ -223,11 +220,21 @@ public class PlayerController : CharacterController
 
                 immortal = false;
             }
-            else
-            {
+            else {
                 MyAnimator.SetLayerWeight(1, 0);
                 MyAnimator.SetTrigger("death");
             }
         }
+    }
+
+    public override void Death() {
+
+        MyRigidBody.velocity = Vector2.zero; 
+
+        MyAnimator.SetTrigger("idle");
+
+        health = 30;
+
+        transform.position = startPos;
     }
 }
