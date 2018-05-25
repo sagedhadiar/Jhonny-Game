@@ -37,6 +37,12 @@ public class PlayerController : CharacterController
     [SerializeField]
     private float immortalTime;
 
+    private float direction;
+
+    private bool move;
+
+    private float btnHorizontal;
+
     private SpriteRenderer spriteRenderer;
 
     private Vector3 startPos;
@@ -97,9 +103,24 @@ public class PlayerController : CharacterController
 
             OnGround = IsGrounded();
 
-            HandleMovement(horizontal);
+            //Using btn move
+            if (move) {
 
-            Flip(horizontal);
+                //To decrease the acceleration while moving using buttons
+                this.btnHorizontal = Mathf.Lerp(btnHorizontal, direction, Time.deltaTime * 2);
+
+                //Call the move method
+                HandleMovement(btnHorizontal);
+
+                //Call the flip method
+                Flip(direction);
+
+            }
+            else {
+                HandleMovement(horizontal);
+
+                Flip(horizontal);
+            }
 
             HandleLayers();
         }
@@ -237,5 +258,31 @@ public class PlayerController : CharacterController
         health = 30;
 
         transform.position = startPos;
+    }
+
+    public void BtnJump() {
+        MyAnimator.SetTrigger("jump");
+        Jump = true;
+    }
+    public void BtnAttack() {
+        MyAnimator.SetTrigger("attack");
+    }
+    public void BtnThrow() {
+        MyAnimator.SetTrigger("throw"); 
+    }
+    public void BtnSlide() {
+        MyAnimator.SetTrigger("slide");
+    }
+    public void BtnMove(float direction) {
+
+        this.direction = direction;
+        move = true;
+
+    }
+
+    public void BtnStopMove() {
+        this.direction = 0;
+        this.btnHorizontal = 0;
+        this.move = false;
     }
 }
