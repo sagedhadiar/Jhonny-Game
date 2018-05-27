@@ -21,6 +21,9 @@ public class PlayerController : CharacterController
     public event DeadEventHandler Dead;
 
     [SerializeField]
+    private Stat healthStat;
+
+    [SerializeField]
     private Transform[] groundPoints;
 
     [SerializeField]
@@ -56,11 +59,11 @@ public class PlayerController : CharacterController
     public override bool IsDead {
         get
         {
-            if (health <= 0) { 
+            if (healthStat.CurrentVal <= 0) { 
                 OnDead();
             }
 
-            return health <= 0;
+            return healthStat.CurrentVal <= 0;
         }
     }
 
@@ -71,7 +74,9 @@ public class PlayerController : CharacterController
 	// Use this for initialization
 	public override void Start () {
         base.Start();
-      
+
+        healthStat.Initialize();
+
         startPos = transform.position;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -229,7 +234,7 @@ public class PlayerController : CharacterController
     public override IEnumerator TakeDamage() {
 
         if (!immortal) {
-            health -= 10;
+            healthStat.CurrentVal -= 10;
 
             if (!IsDead)  {
                 MyAnimator.SetTrigger("damage");
@@ -255,7 +260,7 @@ public class PlayerController : CharacterController
 
         MyAnimator.SetTrigger("idle");
 
-        health = 30;
+        healthStat.CurrentVal = healthStat.MaxVal;
 
         transform.position = startPos;
     }

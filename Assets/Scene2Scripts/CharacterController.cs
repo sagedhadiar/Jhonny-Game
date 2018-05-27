@@ -7,12 +7,14 @@ public abstract class CharacterController : MonoBehaviour {
     [SerializeField]
     protected Transform KnifePos;
 
+    //The knife Prefab, this is used for instantiating a knife
     [SerializeField]
     protected GameObject KnifePrefab;
 
     [SerializeField]
     protected float movementSpeed;
 
+    //Indicates if the character is facing right
     protected bool facingRight;
 
     public bool Attack { get; set; }
@@ -21,12 +23,15 @@ public abstract class CharacterController : MonoBehaviour {
 
     public abstract void Death();
 
+    //Character's Health
     [SerializeField]
     protected int health;
 
+    //Character's Sword Collider
     [SerializeField]
     private EdgeCollider2D swordCollider;
 
+    //A list of damage sources(that can damage the character)
     [SerializeField]
     private List<string> damageSources;
 
@@ -42,6 +47,7 @@ public abstract class CharacterController : MonoBehaviour {
     private int KnifeLeftDirection;
 
     public Animator MyAnimator { get; private set; }
+
     public EdgeCollider2D SwordCollider {
         get
         {
