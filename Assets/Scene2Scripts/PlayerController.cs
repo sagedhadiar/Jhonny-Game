@@ -21,9 +21,6 @@ public class PlayerController : CharacterController
     public event DeadEventHandler Dead;
 
     [SerializeField]
-    private Stat healthStat;
-
-    [SerializeField]
     private Transform[] groundPoints;
 
     [SerializeField]
@@ -74,8 +71,6 @@ public class PlayerController : CharacterController
 	// Use this for initialization
 	public override void Start () {
         base.Start();
-
-        healthStat.Initialize();
 
         startPos = transform.position;
 

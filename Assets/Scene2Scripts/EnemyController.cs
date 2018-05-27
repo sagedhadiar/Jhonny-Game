@@ -27,13 +27,12 @@ public class EnemyController : CharacterController {
     [SerializeField]
     private Transform rightEdge;
 
+    private Canvas healthCanvas;
+
     //Indicates if the enemy is in melee range
-    public bool InMeleeRange
-    {
-        get
-        {
-            if (Target != null)
-            {
+    public bool InMeleeRange {
+        get {
+            if (Target != null) {
                 return Vector2.Distance(transform.position, Target.transform.position) <= meleeRange; 
             }
             return false;
@@ -52,9 +51,8 @@ public class EnemyController : CharacterController {
 
     //Indicates if the enemy is dead
     public override bool IsDead {
-        get
-        {
-            return health <= 0;
+        get {
+            return healthStat.CurrentVal <= 0;
         }
            
     }
@@ -72,6 +70,8 @@ public class EnemyController : CharacterController {
 
         //Sets the enemy in idle state
         ChangeState(new IdleState());
+
+        healthCanvas = transform.GetComponentInChildren<Canvas>();
     }
 
     // Update is called once per frame
@@ -184,34 +184,45 @@ public class EnemyController : CharacterController {
     //Makes the enemy takes damage
     public override IEnumerator TakeDamage() {
 
-        health -= 10;
+        if (!healthCanvas.isActiveAndEnabled) {
+            healthCanvas.enabled = true;
+        }
+
+        //Reduces the health
+        healthStat.CurrentVal -= 10;
 
         //if the enemy is not dead then play the enemy-damage animation
         if (!IsDead) {
             MyAnimator.SetTrigger("damage");
         }
+        //If the enemy is dead then make sure that we play the dead animation 
         else {
             MyAnimator.SetTrigger("death");
             yield return null;
         }
     }
 
-    public override void Death() {
+    public override void Death()
+    {
 
         Destroy(gameObject);
-        
+
+
     }
 
-
+    //Removes the enemy from the game
     //If we want to make the enemy respawn after a certain of time we can call this method instead of the upper method
-    //public override void Death() {
+    //public override void Death()
+    //{
 
     //    MyAnimator.ResetTrigger("death");
 
     //    MyAnimator.SetTrigger("idle");
 
-    //    health = 30;
+    //    healthStat.CurrentVal = healthStat.MaxVal;
 
     //    transform.position = startPos;
+
+    //    healthCanvas.enabled = false;
     //}
 }
