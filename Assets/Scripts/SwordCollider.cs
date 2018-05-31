@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwordCollider : MonoBehaviour {
+public class SwordCollider : MonoBehaviour
+{
 
     [SerializeField]
     private string targetTag;
 
-    void OnTriggerEnter2D(Collider2D other) {
+    void OnTriggerEnter2D(Collider2D other)
+    {
 
-        if (other.tag == targetTag) { 
+        if (other.tag == targetTag)
+        {
 
             GetComponent<Collider2D>().enabled = false;
 

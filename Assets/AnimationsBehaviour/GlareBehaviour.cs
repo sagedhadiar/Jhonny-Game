@@ -2,26 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathBehaviour : StateMachineBehaviour {
+public class GlareBehaviour : StateMachineBehaviour {
 
-    private float respawnTime = 5;
-    private float deathTimer;
+    private float glareTime = 5;
+    private float elapsed;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        deathTimer = 0;
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        elapsed = 0;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        deathTimer += Time.deltaTime;
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)  {
 
-        if(deathTimer >= respawnTime) {
-            deathTimer = 0;
-            animator.GetComponent<CharacterController>().Death();
-        }
+        elapsed += Time.deltaTime;
+
+        if (elapsed >= glareTime)
+            animator.SetTrigger("glare");
+
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

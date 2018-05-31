@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : IEnemyState
-{
+public class IdleState : IEnemyState {
     private EnemyController enemy;
 
     private float idleTimer;

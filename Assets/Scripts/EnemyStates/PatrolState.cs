@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatrolState : IEnemyState
-{
+public class PatrolState : IEnemyState {
     private EnemyController enemy;
 
     private float patrolTimer;
