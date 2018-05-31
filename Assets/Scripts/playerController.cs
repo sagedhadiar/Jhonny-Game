@@ -21,6 +21,8 @@ public class PlayerController : CharacterController {
 
     public event DeadEventHandler Dead;
 
+    private IUseable useable;
+
     [SerializeField]
     private Transform[] groundPoints;
 
@@ -80,7 +82,7 @@ public class PlayerController : CharacterController {
 	public override void Start () {
         base.Start();
 
-        OnLadder = true;
+        OnLadder = false;
 
         startPos = transform.position;
 
@@ -189,6 +191,10 @@ public class PlayerController : CharacterController {
             MyAnimator.SetTrigger("throw");
         }
 
+        if (Input.GetKeyDown(KeyCode.E)) {
+            Use();
+        }
+
     }
     private void Flip(float horizontal){
         if(horizontal > 0 && !facingRight || horizontal < 0 && facingRight){
@@ -281,6 +287,12 @@ public class PlayerController : CharacterController {
         transform.position = startPos;
     }
 
+    private void Use() {
+        if(useable != null) {
+            useable.Use();
+        }
+    }
+
     public void BtnJump() {
         MyAnimator.SetTrigger("jump");
         Jump = true;
@@ -311,6 +323,21 @@ public class PlayerController : CharacterController {
         if(other.gameObject.tag == "Coin")  {
             GameManager.Instance.CollectedCoins++;
             Destroy(other.gameObject);
+        }
+    }
+
+    public override void OnTriggerEnter2D(Collider2D other) {
+
+        if(other.tag == "Useable") {
+            useable = other.GetComponent<IUseable>();
+        }
+        base.OnTriggerEnter2D(other);
+    }
+
+    private void OnTriggerExit2D(Collider2D other) {
+
+        if (other.tag == "Useable") {
+            useable = null;
         }
     }
 }
