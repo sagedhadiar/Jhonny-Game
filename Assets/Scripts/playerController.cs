@@ -4,7 +4,9 @@ using UnityEngine;
 
 public delegate void DeadEventHandler();
 public class PlayerController : CharacterController {
+
     private static PlayerController instance;
+
     public static PlayerController Instance
 
     {
@@ -42,11 +44,18 @@ public class PlayerController : CharacterController {
 
     private float btnHorizontal;
 
+    private float btnVertical;
+
     private SpriteRenderer spriteRenderer;
 
     private Vector3 startPos;
 
     public Rigidbody2D MyRigidBody { get; set; }
+
+    public bool OnLadder { get; set; }
+
+    [SerializeField]
+    private float climbSpeed;
    
     public bool Slide { get; set; }
     public bool Jump { get; set; }
@@ -70,6 +79,8 @@ public class PlayerController : CharacterController {
 	// Use this for initialization
 	public override void Start () {
         base.Start();
+
+        OnLadder = true;
 
         startPos = transform.position;
 
@@ -99,6 +110,7 @@ public class PlayerController : CharacterController {
 
             //return 0 or 1
             float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
 
             OnGround = IsGrounded();
 
@@ -107,16 +119,17 @@ public class PlayerController : CharacterController {
 
                 //To decrease the acceleration while moving using buttons
                 this.btnHorizontal = Mathf.Lerp(btnHorizontal, direction, Time.deltaTime * 2);
+                this.btnVertical = Mathf.Lerp(btnHorizontal, direction, Time.deltaTime * 2);
 
                 //Call the move method
-                HandleMovement(btnHorizontal);
+                HandleMovement(btnHorizontal, btnVertical);
 
                 //Call the flip method
                 Flip(direction);
 
             }
             else {
-                HandleMovement(horizontal);
+                HandleMovement(horizontal, vertical);
 
                 Flip(horizontal);
             }
@@ -139,7 +152,7 @@ public class PlayerController : CharacterController {
         }
     }
 
-    private void HandleMovement(float horizontal){
+    private void HandleMovement(float horizontal, float vertical){
         if(MyRigidBody.velocity.y < 0){
             MyAnimator.SetBool("land", true);
         }
@@ -150,6 +163,10 @@ public class PlayerController : CharacterController {
 
         if(Jump && (MyRigidBody.velocity.y == 0)){
             MyRigidBody.AddForce(new Vector2(0, jumpForce));
+        }
+
+        if (OnLadder) {
+            MyRigidBody.velocity = new Vector2(horizontal * climbSpeed, vertical * climbSpeed);
         }
 
         MyAnimator.SetFloat("speed", Mathf.Abs(horizontal));
