@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeState : IEnemyState
-{
+public class MeleeState : IEnemyState {
     private EnemyController enemy;
 
     private float attackTimer;

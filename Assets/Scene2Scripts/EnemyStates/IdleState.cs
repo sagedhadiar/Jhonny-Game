@@ -8,7 +8,7 @@ public class IdleState : IEnemyState
 
     private float idleTimer;
 
-    private float idleDuration = 2;
+    private float idleDuration;
 
     public void Enter(EnemyController enemy) {
         idleDuration = UnityEngine.Random.Range(1, 6);

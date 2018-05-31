@@ -11,7 +11,11 @@ public class PatrolState : IEnemyState
     private float patrolDuration ;
 
     public void Enter(EnemyController enemy) {
+
         patrolDuration = UnityEngine.Random.Range(6, 10);
+
+        //patrolDuration = enemy.PatrolDur; 
+
         this.enemy = enemy;
     }
 
@@ -22,6 +26,7 @@ public class PatrolState : IEnemyState
         
         //If the enemy have a target and inThrowRange then throw else keep Patrolling
         if(enemy.Target != null && enemy.InThrowRange) {
+
             enemy.ChangeState(new RangedState());
         }
     }
@@ -37,11 +42,10 @@ public class PatrolState : IEnemyState
     }
 
     private void Patrol() {
+        //patrolDuration = enemy.PatrolDur;
 
         patrolTimer += Time.deltaTime;
-
-        if (patrolTimer >= patrolDuration)
-        {
+        if (patrolTimer >= patrolDuration) {
             enemy.ChangeState(new IdleState());
         }
     }

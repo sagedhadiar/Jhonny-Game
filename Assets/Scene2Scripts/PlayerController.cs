@@ -126,13 +126,18 @@ public class PlayerController : CharacterController
         }
     }
 
-    public void OnDead() {
+    //public void OnDead() {
 
+    //    Dead?.Invoke();
+
+    //}
+
+    public void OnDead()
+    {
         if (Dead != null)
         {
             Dead();
         }
-
     }
 
     private void HandleMovement(float horizontal){
@@ -211,7 +216,7 @@ public class PlayerController : CharacterController
     private IEnumerator IndicateImmortal()
     {
 
-        for (int i = 0; i < 5; i++) { 
+        while (immortal) { 
 
             spriteRenderer.enabled = false;
 

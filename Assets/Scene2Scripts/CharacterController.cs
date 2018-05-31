@@ -7,28 +7,34 @@ public abstract class CharacterController : MonoBehaviour {
     [SerializeField]
     protected Transform KnifePos;
 
-    //The knife Prefab, this is used for instantiating a knife
-    [SerializeField]
-    protected GameObject KnifePrefab;
-
     [SerializeField]
     protected float movementSpeed;
 
     //Indicates if the character is facing right
     protected bool facingRight;
 
+    //The knife Prefab, this is used for instantiating a knife
+    [SerializeField]
+    protected GameObject KnifePrefab;
+
+    //Character's Health
+    [SerializeField]
+    protected Stat healthStat;
+
+    //Indicates if the character is dead
+    public abstract bool IsDead { get; }
+
     //Indicates if the character can attack
     public bool Attack { get; set; }
+
+    //A reference to the character's animator
+    public Animator MyAnimator { get; private set; }
 
     //Indicates if the character is taking damage
     public bool TakingDamage { get; set; }
 
     //Handles the character's death
     public abstract void Death();
-
-    //Character's Health
-    [SerializeField]
-    protected Stat healthStat;
 
     //Character's Sword Collider
     [SerializeField]
@@ -38,9 +44,6 @@ public abstract class CharacterController : MonoBehaviour {
     [SerializeField]
     private List<string> damageSources;
 
-    //Indicates if the character is dead
-    public abstract bool IsDead { get; }
-
     [SerializeField]
     private string knifeTag;
 
@@ -49,9 +52,6 @@ public abstract class CharacterController : MonoBehaviour {
 
     //Give the left position <--
     private int KnifeLeftDirection;
-
-    //A reference to the character's animator
-    public Animator MyAnimator { get; private set; }
 
     //Property for getting the swordCollider
     public EdgeCollider2D SwordCollider {
@@ -116,7 +116,8 @@ public abstract class CharacterController : MonoBehaviour {
     }
 
     public virtual void OnTriggerEnter2D(Collider2D other) {
-        //Using 2 tags revent the player from hitting himself
+
+        //Using 2 tags prevent the player from hitting himself
         if (damageSources.Contains(other.tag)) {
             StartCoroutine(TakeDamage());
         }

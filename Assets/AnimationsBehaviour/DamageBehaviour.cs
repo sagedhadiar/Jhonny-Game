@@ -11,6 +11,7 @@ public class DamageBehaviour : StateMachineBehaviour {
 
         animator.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
+
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

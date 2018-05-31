@@ -29,6 +29,19 @@ public class EnemyController : CharacterController {
 
     private Canvas healthCanvas;
 
+    //public float PatrolDur {
+    //    get
+    //    {
+    //        float partol;
+    //        if (transform.localScale.x == 1)
+    //            partol = Vector2.Distance(transform.position, rightEdge.transform.position);
+    //        else
+    //            partol=  Vector2.Distance(transform.position, leftEdge.transform.position);
+
+    //            return partol;
+    //    }
+    //}
+
     //Indicates if the enemy is in melee range
     public bool InMeleeRange {
         get {
@@ -158,6 +171,8 @@ public class EnemyController : CharacterController {
 
                 //Moves the enemy in the correct direction
                 transform.Translate(GetDirection() * (movementSpeed * Time.deltaTime));
+
+
             }
             else if (currentState is PatrolState) {
                 ChangeDirection();
@@ -202,12 +217,8 @@ public class EnemyController : CharacterController {
         }
     }
 
-    public override void Death()
-    {
-
+    public override void Death() {
         Destroy(gameObject);
-
-
     }
 
     //Removes the enemy from the game
