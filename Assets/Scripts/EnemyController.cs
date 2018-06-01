@@ -29,6 +29,8 @@ public class EnemyController : CharacterController {
 
     private Canvas healthCanvas;
 
+    private bool dropItem = true;
+
     //public float PatrolDur {
     //    get
     //    {
@@ -177,6 +179,10 @@ public class EnemyController : CharacterController {
             else if (currentState is PatrolState) {
                 ChangeDirection();
             }
+            else if(currentState is RangedState) {
+                Target = null;
+                ChangeState(new IdleState());
+            }
         }
        
     }
@@ -212,10 +218,15 @@ public class EnemyController : CharacterController {
         }
         //If the enemy is dead then make sure that we play the dead animation 
         else {
-            GameObject coin = Instantiate(GameManager.Instance.CoinPrefab, new Vector3(transform.position.x, transform.position.y + 2), Quaternion.identity);
-            Physics2D.IgnoreCollision(coin.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+
+            if (dropItem)  {
+                GameObject coin = Instantiate(GameManager.Instance.CoinPrefab, new Vector3(transform.position.x, transform.position.y + 2), Quaternion.identity);
+                Physics2D.IgnoreCollision(coin.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                dropItem = false;
+            }
             MyAnimator.SetTrigger("death");
             yield return null;
+
         }
     }
 
@@ -227,7 +238,9 @@ public class EnemyController : CharacterController {
     //If we want to make the enemy respawn after a certain of time we can call this method instead of the upper method
     //public override void Death()
     //{
-    
+
+    //    dropItem = true;
+
     //    MyAnimator.ResetTrigger("death");
 
     //    MyAnimator.SetTrigger("idle");
