@@ -213,7 +213,8 @@ public class PlayerController : CharacterController {
             MyAnimator.SetTrigger("attack");
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl)){
+        if (Input.GetKeyDown(KeyCode.LeftControl) && MyRigidBody.velocity != Vector2.zero)
+        {
             MyAnimator.SetTrigger("slide");
         }
 
@@ -336,7 +337,8 @@ public class PlayerController : CharacterController {
         MyAnimator.SetTrigger("throw"); 
     }
     public void BtnSlide() {
-        MyAnimator.SetTrigger("slide");
+        if(MyRigidBody.velocity != Vector2.zero)
+            MyAnimator.SetTrigger("slide");
     }
     public void BtnMove(float direction) {
         this.direction = direction;
