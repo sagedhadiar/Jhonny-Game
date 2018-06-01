@@ -163,11 +163,12 @@ public class PlayerController : CharacterController {
             MyRigidBody.velocity = new Vector2(horizontal * movementSpeed, MyRigidBody.velocity.y);
         }
 
-        if(Jump && (MyRigidBody.velocity.y == 0)){
+        if(Jump && MyRigidBody.velocity.y == 0 && !OnLadder){
             MyRigidBody.AddForce(new Vector2(0, jumpForce));
         }
 
         if (OnLadder) {
+            MyAnimator.speed = vertical !=0 ? Mathf.Abs(vertical) : Mathf.Abs(horizontal);
             MyRigidBody.velocity = new Vector2(horizontal * climbSpeed, vertical * climbSpeed);
         }
 
@@ -175,8 +176,9 @@ public class PlayerController : CharacterController {
     }
 
     private void HandleInput(){
-        if (Input.GetKeyDown(KeyCode.Space)){
+        if (Input.GetKeyDown(KeyCode.Space) && !OnLadder){
             MyAnimator.SetTrigger("jump");
+            Jump = true;
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift)){
