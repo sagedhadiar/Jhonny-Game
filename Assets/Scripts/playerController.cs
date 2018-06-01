@@ -74,6 +74,14 @@ public class PlayerController : CharacterController {
         }
     }
 
+    public bool IsFalling
+    {
+        get
+        {
+            return MyRigidBody.velocity.y < 0;
+        }
+    }
+
     //Determine what ground is because some wil not be considered as ground
     [SerializeField]
     private LayerMask whatIsGround;
@@ -155,7 +163,9 @@ public class PlayerController : CharacterController {
     }
 
     private void HandleMovement(float horizontal, float vertical){
-        if(MyRigidBody.velocity.y < 0){
+        if(IsFalling){
+            //Falling Layer
+            gameObject.layer = 12;
             MyAnimator.SetBool("land", true);
         }
 
@@ -176,7 +186,7 @@ public class PlayerController : CharacterController {
     }
 
     private void HandleInput(){
-        if (Input.GetKeyDown(KeyCode.Space) && !OnLadder){
+        if (Input.GetKeyDown(KeyCode.Space) && !OnLadder && !IsFalling){
             MyAnimator.SetTrigger("jump");
             Jump = true;
         }
@@ -296,8 +306,11 @@ public class PlayerController : CharacterController {
     }
 
     public void BtnJump() {
-        MyAnimator.SetTrigger("jump");
-        Jump = true;
+        if (!OnLadder && !IsFalling)
+        {
+            MyAnimator.SetTrigger("jump");
+            Jump = true;
+        }
     }
     public void BtnAttack() {
         MyAnimator.SetTrigger("attack");

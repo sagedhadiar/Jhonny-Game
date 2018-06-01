@@ -38,11 +38,23 @@ public class PlatformMovement : MonoBehaviour {
 
         childTransform.localPosition = Vector3.MoveTowards(childTransform.localPosition, nexPos, speed * Time.deltaTime);
         if(Vector3.Distance(childTransform.localPosition, nexPos) <= 0.1)
-            changeDestination();
+            ChangeDestination();
 
     }
 
-    private void changeDestination() {
+    private void ChangeDestination() {
         nexPos = nexPos != posA ? posA : posB;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+
+        if(other.gameObject.tag == "jhonny") {
+            other.gameObject.layer = 11;
+            other.transform.SetParent(childTransform);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D other) {
+        other.transform.SetParent(null);
     }
 }
