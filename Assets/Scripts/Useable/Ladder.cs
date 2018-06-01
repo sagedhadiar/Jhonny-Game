@@ -18,7 +18,7 @@ public class Ladder : MonoBehaviour, IUseable {
 	}
 
     public void Use() {
-
+        
         if(PlayerController.Instance.OnLadder) {
             // we need to stop climbing
             UseLadder(false, 1, 0, 1, "land");
@@ -30,6 +30,15 @@ public class Ladder : MonoBehaviour, IUseable {
         }
     }
 
+    public void UseAndroid()
+    {
+
+        // we need to start climbing
+        UseLadderAndroid(true, 0, 1, 0, "reset");
+        Physics2D.IgnoreCollision(PlayerController.Instance.GetComponent<Collider2D>(), platformCollider, true);
+        
+    }
+
     private void UseLadder(bool onLadder, int gravity, int weight, int animSpeed, string trigger) {
 
         PlayerController.Instance.OnLadder = onLadder;
@@ -39,6 +48,17 @@ public class Ladder : MonoBehaviour, IUseable {
         PlayerController.Instance.MyAnimator.SetTrigger(trigger);
 
     }
+    private void UseLadderAndroid(bool onLadder, int gravity, int weight, int animSpeed, string trigger)
+    {
+
+        PlayerController.Instance.OnLadder = onLadder;
+        PlayerController.Instance.MyRigidBody.gravityScale = gravity;
+        PlayerController.Instance.MyAnimator.SetLayerWeight(2, weight);
+        PlayerController.Instance.MyAnimator.speed = animSpeed;
+        PlayerController.Instance.MyAnimator.SetTrigger(trigger);
+
+    }
+
 
     private void OnTriggerExit2D(Collider2D other) {
 

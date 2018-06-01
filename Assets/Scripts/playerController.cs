@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public delegate void DeadEventHandler();
 public class PlayerController : CharacterController {
@@ -31,6 +32,8 @@ public class PlayerController : CharacterController {
 
     [SerializeField]
     private bool airControl;
+
+    private bool canMoveHorizontal;
 
     [SerializeField]
     private float jumpForce;
@@ -86,8 +89,11 @@ public class PlayerController : CharacterController {
     [SerializeField]
     private LayerMask whatIsGround;
 
-	// Use this for initialization
-	public override void Start () {
+    [SerializeField]
+    private GameObject[] buttons;
+
+    // Use this for initialization
+    public override void Start () {
         base.Start();
 
         OnLadder = false;
@@ -110,7 +116,27 @@ public class PlayerController : CharacterController {
             }
 
             HandleInput();
-        } 
+        }
+     
+            foreach (GameObject butTag in buttons)
+            {
+                if (useable != null)  {
+                    if (butTag.tag == "UpButton" || butTag.tag == "DownButton") {
+                        butTag.SetActive(true);
+                    }
+                    else {
+                        butTag.SetActive(false);
+                    }
+                }
+                else {
+                    if (butTag.tag == "UpButton" || butTag.tag == "DownButton") {
+                        butTag.SetActive(false);
+                    }
+                    else {
+                        butTag.SetActive(true);
+                    }
+                }
+        }
     }
 	
 	// Update is called once per frame
@@ -127,15 +153,7 @@ public class PlayerController : CharacterController {
             //Using btn move
             if (move) {
 
-                //To decrease the acceleration while moving using buttons
-                this.btnHorizontal = Mathf.Lerp(btnHorizontal, direction, Time.deltaTime * 2);
-                this.btnVertical = Mathf.Lerp(btnHorizontal, direction, Time.deltaTime * 2);
-
-                //Call the move method
-                HandleMovement(btnHorizontal, btnVertical);
-
-                //Call the flip method
-                Flip(direction);
+                canMoveButtons(canMoveHorizontal);
 
             }
             else {
@@ -306,8 +324,7 @@ public class PlayerController : CharacterController {
     }
 
     public void BtnJump() {
-        if (!OnLadder && !IsFalling)
-        {
+        if (!OnLadder && !IsFalling) {
             MyAnimator.SetTrigger("jump");
             Jump = true;
         }
@@ -322,15 +339,27 @@ public class PlayerController : CharacterController {
         MyAnimator.SetTrigger("slide");
     }
     public void BtnMove(float direction) {
-
         this.direction = direction;
+        this.canMoveHorizontal = true;
         move = true;
+    }
+
+    public void BtnMoveVertical(float direction)
+    {
+        if (useable != null) {
+            this.canMoveHorizontal = false;
+            this.direction = direction;
+            move = true;
+            useable.UseAndroid();
+        }
+       
 
     }
 
     public void BtnStopMove() {
         this.direction = 0;
         this.btnHorizontal = 0;
+        this.btnVertical = 0;
         this.move = false;
     }
 
@@ -354,5 +383,22 @@ public class PlayerController : CharacterController {
         if (other.tag == "Useable") {
             useable = null;
         }
+    }
+    private void canMoveButtons(bool canMoveHorizontal) {
+        //To decrease the acceleration while moving using buttons
+        if (canMoveHorizontal) {
+            this.btnHorizontal = Mathf.Lerp(btnHorizontal, direction, Time.deltaTime * 2);
+            this.btnVertical = 0;
+        }
+        else {
+            this.btnHorizontal = 0;
+            this.btnVertical = Mathf.Lerp(direction, btnVertical, Time.deltaTime * 2);
+        }
+
+        //Call the move method
+        HandleMovement(btnHorizontal, btnVertical);
+
+        //Call the flip method
+        Flip(direction);
     }
 }
