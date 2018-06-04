@@ -93,7 +93,7 @@ public abstract class CharacterController : MonoBehaviour {
         facingRight = !facingRight;
 
         //Flips the character by changing the scale
-        transform.localScale = new Vector3(transform.localScale.x * -1, 1, 1);
+        transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, 1);
     }
 
     //Throws the Knife

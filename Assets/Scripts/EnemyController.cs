@@ -31,19 +31,6 @@ public class EnemyController : CharacterController {
 
     private bool dropItem = true;
 
-    //public float PatrolDur {
-    //    get
-    //    {
-    //        float partol;
-    //        if (transform.localScale.x == 1)
-    //            partol = Vector2.Distance(transform.position, rightEdge.transform.position);
-    //        else
-    //            partol=  Vector2.Distance(transform.position, leftEdge.transform.position);
-
-    //            return partol;
-    //    }
-    //}
-
     //Indicates if the enemy is in melee range
     public bool InMeleeRange {
         get {

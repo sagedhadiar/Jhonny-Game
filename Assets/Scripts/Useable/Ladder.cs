@@ -8,18 +8,18 @@ public class Ladder : MonoBehaviour, IUseable {
     private Collider2D platformCollider;
 
     // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    void Start() {
+
+    }
+
+    // Update is called once per frame
+    void Update() {
+
+    }
 
     public void Use() {
-        
-        if(PlayerController.Instance.OnLadder) {
+
+        if (PlayerController.Instance.OnLadder) {
             // we need to stop climbing
             UseLadder(false, 1, 0, 1, "land");
         }
@@ -30,10 +30,8 @@ public class Ladder : MonoBehaviour, IUseable {
         }
     }
 
-    public void UseAndroid()
-    {
-
-        // we need to start climbing
+    public void UseAndroid()  {
+        
         UseLadderAndroid(true, 0, 1, 0, "reset");
         Physics2D.IgnoreCollision(PlayerController.Instance.GetComponent<Collider2D>(), platformCollider, true);
         
@@ -62,8 +60,7 @@ public class Ladder : MonoBehaviour, IUseable {
 
     private void OnTriggerExit2D(Collider2D other) {
 
-        if (other.tag == "jhonny")
-        {
+        if (other.tag == "jhonny"){
             UseLadder(false, 1, 0, 1, "land");
             Physics2D.IgnoreCollision(PlayerController.Instance.GetComponent<Collider2D>(), platformCollider, false);
         }

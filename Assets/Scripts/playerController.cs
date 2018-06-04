@@ -85,6 +85,14 @@ public class PlayerController : CharacterController {
         }
     }
 
+    private int extraJumpValue;
+
+    [SerializeField]
+    private int extraJump;
+
+    [SerializeField]
+    private bool onMediumPlatform = false;
+
     //Determine what ground is because some wil not be considered as ground
     [SerializeField]
     private LayerMask whatIsGround;
@@ -97,6 +105,8 @@ public class PlayerController : CharacterController {
         base.Start();
 
         OnLadder = false;
+
+        extraJumpValue = extraJump;
 
         startPos = transform.position;
 
@@ -187,12 +197,21 @@ public class PlayerController : CharacterController {
             MyAnimator.SetBool("land", true);
         }
 
-        if(!Attack && !Slide && (OnGround || airControl)){
+        if(OnGround && extraJumpValue == 0) {
+                extraJumpValue = extraJump;
+        }
+
+        if (!Attack && !Slide && (OnGround || airControl)){
             MyRigidBody.velocity = new Vector2(horizontal * movementSpeed, MyRigidBody.velocity.y);
         }
 
-        if(Jump && MyRigidBody.velocity.y == 0 && !OnLadder){
-            MyRigidBody.AddForce(new Vector2(0, jumpForce));
+        if(Jump && !OnLadder && extraJumpValue >0) {
+            if(extraJumpValue == 2)
+                MyRigidBody.AddForce(new Vector2(0, jumpForce));
+            else if (extraJumpValue == 1)
+                MyRigidBody.AddForce(new Vector2(0, jumpForce ));
+            extraJumpValue--;
+            Jump = false;
         }
 
         if (OnLadder) {
@@ -349,10 +368,12 @@ public class PlayerController : CharacterController {
     public void BtnMoveVertical(float direction)
     {
         if (useable != null) {
-            this.canMoveHorizontal = false;
-            this.direction = direction;
-            move = true;
-            useable.UseAndroid();
+            if ((onMediumPlatform && direction != 1) || (OnGround && !onMediumPlatform && direction != -1) || (!onMediumPlatform && !OnGround)) { 
+                this.canMoveHorizontal = false;
+                this.direction = direction;
+                move = true;
+                useable.UseAndroid();
+            }
         }
        
 
@@ -370,6 +391,14 @@ public class PlayerController : CharacterController {
             GameManager.Instance.CollectedCoins++;
             Destroy(other.gameObject);
         }
+        if (other.gameObject.tag == "MediumPlatform") {
+            onMediumPlatform = true;
+        }
+    }
+    private void OnCollisionExit2D(Collision2D other) {
+        if (other.gameObject.tag == "MediumPlatform") {
+            onMediumPlatform = false;
+        }
     }
 
     public override void OnTriggerEnter2D(Collider2D other) {
@@ -377,6 +406,7 @@ public class PlayerController : CharacterController {
         if(other.tag == "Useable") {
             useable = other.GetComponent<IUseable>();
         }
+        
         base.OnTriggerEnter2D(other);
     }
 
@@ -403,4 +433,5 @@ public class PlayerController : CharacterController {
         //Call the flip method
         Flip(direction);
     }
+
 }
