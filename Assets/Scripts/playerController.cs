@@ -85,6 +85,7 @@ public class PlayerController : CharacterController {
         }
     }
 
+    [SerializeField]
     private int extraJumpValue;
 
     [SerializeField]
