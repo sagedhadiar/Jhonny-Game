@@ -8,6 +8,7 @@ public class Pendulum : MonoBehaviour
     public float leftPushRange;
     public float rightPushRange;
     public float velocityThreshold;
+    public int direction;
     #endregion //Public Variables
 
     #region Private Variables
@@ -19,7 +20,7 @@ public class Pendulum : MonoBehaviour
     void Start()
     {
         body2d = GetComponent<Rigidbody2D>();
-        body2d.angularVelocity = velocityThreshold;
+        body2d.angularVelocity = velocityThreshold * direction;
     }
     //Update is called by Unity every frame
     void Update()

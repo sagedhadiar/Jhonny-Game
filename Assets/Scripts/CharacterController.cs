@@ -80,11 +80,14 @@ public abstract class CharacterController : MonoBehaviour {
         }
 
         healthStat.Initialize();
+
+        collidersss = new List<string>();
     }
+
+    public List<string> collidersss;
 
     // Update is called once per frame
     void Update() {
-
     }
 
     //Changes the characters direction
@@ -116,14 +119,14 @@ public abstract class CharacterController : MonoBehaviour {
     }
 
     public virtual void OnTriggerEnter2D(Collider2D other) {
-
         //Using 2 tags prevent the player from hitting himself
-        if (damageSources.Contains(other.tag)) {
-            StartCoroutine(TakeDamage());
+        if (damageSources.Contains(other.tag))  {
+             StartCoroutine(TakeDamage());
         }
-
     }
 
-    
+   
+
+
 
 }

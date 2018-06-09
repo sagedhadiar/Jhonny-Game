@@ -117,7 +117,9 @@ public class PlayerController : CharacterController {
     }
 
     void Update(){
-        
+
+        StayCollliding();
+
         //after death the player can not move
         if (!TakingDamage && !IsDead) {
 
@@ -406,7 +408,7 @@ public class PlayerController : CharacterController {
         if(other.tag == "Useable") {
             useable = other.GetComponent<IUseable>();
         }
-        
+        collidersss.Add(other.tag);
         base.OnTriggerEnter2D(other);
     }
 
@@ -415,7 +417,14 @@ public class PlayerController : CharacterController {
         if (other.tag == "Useable") {
             useable = null;
         }
+        collidersss.Remove(other.tag);
     }
+    void StayCollliding() {
+        if (collidersss.Contains("Thorn")) {
+            StartCoroutine(TakeDamage());
+        }
+    }
+
     private void canMoveButtons(bool canMoveHorizontal) {
         //To decrease the acceleration while moving using buttons
         if (canMoveHorizontal) {
@@ -433,5 +442,6 @@ public class PlayerController : CharacterController {
         //Call the flip method
         Flip(direction);
     }
+
 
 }
