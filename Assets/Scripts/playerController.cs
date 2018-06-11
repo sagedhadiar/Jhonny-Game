@@ -100,6 +100,12 @@ public class PlayerController : CharacterController {
     [SerializeField]
     private GameObject[] buttons;
 
+    [SerializeField]
+    private CircleCollider2D healthCollider;
+
+    [SerializeField]
+    private Rigidbody2D healthBody;
+
     // Use this for initialization
     public override void Start () {
         base.Start();
@@ -114,9 +120,23 @@ public class PlayerController : CharacterController {
 
         //Reference to myrigidBody of the player
         MyRigidBody = GetComponent<Rigidbody2D>();
+
+        //Collider with the HealthCoin
+        
+        healthCollider.isTrigger = true;
+        healthBody.gravityScale = 0;
     }
 
     void Update(){
+
+        if (healthStat.CurrentVal == healthStat.MaxVal) {
+            healthCollider.isTrigger = true;
+            healthBody.gravityScale = 0;
+        }
+        else {
+            healthCollider.isTrigger = false;
+            healthBody.gravityScale = 1;
+        }
 
         StayCollliding();
 
@@ -393,6 +413,16 @@ public class PlayerController : CharacterController {
             GameManager.Instance.CollectedCoins++;
             Destroy(other.gameObject);
         }
+
+        if (other.gameObject.tag == "Health" && healthStat.CurrentVal != healthStat.MaxVal) {
+            healthStat.CurrentVal += 5;
+            Destroy(other.gameObject);
+        }
+        else if (other.gameObject.tag == "Health" && healthStat.CurrentVal == healthStat.MaxVal) {
+            other.collider.isTrigger = true;
+            other.rigidbody.gravityScale = 0;
+        }
+
         if (other.gameObject.tag == "MediumPlatform") {
             onMediumPlatform = true;
         }
