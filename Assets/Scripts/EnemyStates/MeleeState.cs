@@ -19,10 +19,10 @@ public class MeleeState : IEnemyState {
 
         Attack();
 
-        if(enemy.InThrowRange && !enemy.InMeleeRange) {
+        if(enemy.InThrowRange && !enemy.InMeleeRange && enemy.tag == "EnemyAI") {
             enemy.ChangeState(new RangedState());
         }
-        else if(enemy.Target == null)
+        else if(enemy.Target == null || !enemy.InMeleeRange)
         {
             enemy.ChangeState(new IdleState());
         }

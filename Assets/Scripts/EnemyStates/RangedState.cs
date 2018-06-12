@@ -16,7 +16,7 @@ public class RangedState : IEnemyState {
     }
 
     public void Execute() {
-
+        
         ThrowKnife();
 
         if (enemy.InMeleeRange) {
@@ -45,7 +45,7 @@ public class RangedState : IEnemyState {
             throwTimer = 0;
         }
 
-        if (canThrow) {
+        if (canThrow && enemy.tag == "EnemyAI") {
 
             canThrow = false;
             enemy.MyAnimator.SetTrigger("throw");

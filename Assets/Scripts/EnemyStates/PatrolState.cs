@@ -22,11 +22,22 @@ public class PatrolState : IEnemyState {
         Patrol();
 
         enemy.Move();
-        
-        //If the enemy have a target and inThrowRange then throw else keep Patrolling
-        if(enemy.Target != null && enemy.InThrowRange) {
 
-            enemy.ChangeState(new RangedState());
+        if (enemy.tag == "EnemyAI") {
+            //If the enemy have a target and inThrowRange then throw else keep Patrolling
+            if (enemy.Target != null && enemy.InThrowRange)
+            {
+
+                enemy.ChangeState(new RangedState());
+            }
+        }
+        else
+        {
+            if (enemy.Target != null && enemy.InMeleeRange)
+            {
+
+                enemy.ChangeState(new MeleeState());
+            }
         }
     }
 

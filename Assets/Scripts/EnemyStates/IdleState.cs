@@ -31,7 +31,6 @@ public class IdleState : IEnemyState {
     //towards the player to attack him
     public void OnTriggerEnter(Collider2D other) {
         if(other.tag == "PlayerKnife") {
-
             enemy.Target = PlayerController.Instance.gameObject;
 
         }

@@ -119,9 +119,11 @@ public abstract class CharacterController : MonoBehaviour {
     }
 
     public virtual void OnTriggerEnter2D(Collider2D other) {
+        
         //Using 2 tags prevent the player from hitting himself
         if (damageSources.Contains(other.tag))  {
-             StartCoroutine(TakeDamage());
+
+            StartCoroutine(TakeDamage());
         }
     }
 

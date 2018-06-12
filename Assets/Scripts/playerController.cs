@@ -129,13 +129,18 @@ public class PlayerController : CharacterController {
 
     void Update(){
 
-        if (healthStat.CurrentVal == healthStat.MaxVal) {
-            healthCollider.isTrigger = true;
-            healthBody.gravityScale = 0;
-        }
-        else {
-            healthCollider.isTrigger = false;
-            healthBody.gravityScale = 1;
+        if (healthCollider != null) {
+
+            if (healthStat.CurrentVal == healthStat.MaxVal)
+            {
+                healthCollider.isTrigger = true;
+                healthBody.gravityScale = 0;
+            }
+            else
+            {
+                healthCollider.isTrigger = false;
+                healthBody.gravityScale = 1;
+            }
         }
 
         StayCollliding();
@@ -414,8 +419,10 @@ public class PlayerController : CharacterController {
             Destroy(other.gameObject);
         }
 
+
         if (other.gameObject.tag == "Health" && healthStat.CurrentVal != healthStat.MaxVal) {
             healthStat.CurrentVal += 5;
+            healthCollider = null;
             Destroy(other.gameObject);
         }
         else if (other.gameObject.tag == "Health" && healthStat.CurrentVal == healthStat.MaxVal) {

@@ -6,16 +6,13 @@ public class SwordCollider : MonoBehaviour
 {
 
     [SerializeField]
-    private string targetTag;
+    private List<string> targetTag;
 
     void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.tag == targetTag)
-        {
-
+        if (targetTag.Contains(other.tag)) {
             GetComponent<Collider2D>().enabled = false;
-
         }
     }
 

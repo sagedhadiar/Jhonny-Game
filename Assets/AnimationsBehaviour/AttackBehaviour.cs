@@ -31,7 +31,9 @@ public class AttackBehaviour : StateMachineBehaviour{
         animator.GetComponent<CharacterController>().Attack = false;
         animator.GetComponent<CharacterController>().SwordCollider.enabled = false;
         animator.ResetTrigger("attack");
-        animator.ResetTrigger("throw");
+        if (animator.tag == "EnemyAI"){ 
+            animator.ResetTrigger("throw");
+        }
 
     }
 
