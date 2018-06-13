@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlatformMovement : MonoBehaviour {
 
     //Initially our current position
+    private Vector3 currentPos;
+
     private Vector3 posA;
 
     private Vector3 posB;
@@ -19,13 +22,48 @@ public class PlatformMovement : MonoBehaviour {
     private Transform childTransform;
 
     [SerializeField]
-    private Transform transformB;
-	// Use this for initialization
-	void Start () {
+    private float xMax;
 
-        posA = childTransform.localPosition;
-        posB = transformB.localPosition;
-        nexPos = posB;
+    [SerializeField]
+    private float yMax;
+
+    [SerializeField]
+    private float xMin;
+
+    [SerializeField]
+    private float yMin;
+
+    public enum myEnum // your custom enumeration
+    {
+        Vertical,
+        Horizontal,
+        Oblique
+    };
+
+    public myEnum moveDirection;
+
+    public enum myEnum1 // your custom enumeration
+    {
+        RightOrUP,
+        LeftOrDown
+    };
+
+    public myEnum1 movePos;
+
+    // Use this for initialization
+    void Start () {
+
+        //myEnum.Item1 = "v";
+        currentPos = childTransform.localPosition;
+
+        posA = moveDirection.ToString() == "Vertical" ? new Vector3(transform.localPosition.x, yMax) : moveDirection.ToString() == "Horizontal" ? new Vector3(xMax, transform.localPosition.y) : new Vector3(xMax, yMax);
+
+        posB = moveDirection.ToString() == "Vertical" ? new Vector3(transform.localPosition.x, yMin) : moveDirection.ToString() == "Horizontal" ? new Vector3(xMin, transform.localPosition.y) : new Vector3(xMin, yMin);
+
+        if (movePos.ToString() == "RightOrUP")
+            nexPos = posA;
+        else if(movePos.ToString() == "LeftOrDown")
+            nexPos = posB;
 
     }
 	
@@ -36,8 +74,9 @@ public class PlatformMovement : MonoBehaviour {
 
     private void Move() {
 
-        childTransform.localPosition = Vector3.MoveTowards(childTransform.localPosition, nexPos, speed * Time.deltaTime);
-        if(Vector3.Distance(childTransform.localPosition, nexPos) <= 0.1)
+       
+        transform.localPosition = Vector3.MoveTowards(transform.localPosition, nexPos, speed * Time.deltaTime);
+        if (Vector3.Distance(transform.localPosition, nexPos) <= 0.1)
             ChangeDestination();
 
     }
