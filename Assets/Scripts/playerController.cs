@@ -79,12 +79,12 @@ public class PlayerController : CharacterController {
 
     public bool IsFalling
     {
-        get
-        {
+        get {
             return MyRigidBody.velocity.y < 0;
         }
     }
 
+    [SerializeField]
     private int extraJumpValue;
 
     [SerializeField]
@@ -131,8 +131,7 @@ public class PlayerController : CharacterController {
 
         if (healthCollider != null) {
 
-            if (healthStat.CurrentVal == healthStat.MaxVal)
-            {
+            if (healthStat.CurrentVal == healthStat.MaxVal) {
                 healthCollider.isTrigger = true;
                 healthBody.gravityScale = 0;
             }
@@ -218,13 +217,14 @@ public class PlayerController : CharacterController {
     }
 
     private void HandleMovement(float horizontal, float vertical){
-        if(IsFalling){
+
+        if(IsFalling) {
             //Falling Layer
             gameObject.layer = 12;
             MyAnimator.SetBool("land", true);
         }
 
-        if(OnGround && extraJumpValue == 0) {
+        if(OnGround) {
                 extraJumpValue = extraJump;
         }
 
@@ -250,7 +250,7 @@ public class PlayerController : CharacterController {
     }
 
     private void HandleInput(){
-        if (Input.GetKeyDown(KeyCode.Space) && !OnLadder && !IsFalling){
+        if (Input.GetKeyDown(KeyCode.Space) && !OnLadder){
             MyAnimator.SetTrigger("jump");
             Jump = true;
         }
