@@ -102,14 +102,20 @@ public abstract class CharacterController : MonoBehaviour {
     //Throws the Knife
     public virtual void ThrowKnife(int value) {
 
-        //If we are facing right then throw the knife to the right
-        if (facingRight) {
-            GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, KnifeRightDirection)));
-            tmp.GetComponent<Knife>().Initialize(Vector2.right);
-        }
-        else {
-            GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, KnifeLeftDirection)));
-            tmp.GetComponent<Knife>().Initialize(Vector2.left);
+        if (GameManager.Instance.CollectedKnifes != 0) {
+            //If we are facing right then throw the knife to the right
+            if (facingRight)
+            {
+                GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, KnifeRightDirection)));
+                tmp.GetComponent<Knife>().Initialize(Vector2.right);
+                GameManager.Instance.CollectedKnifes--;
+            }
+            else
+            {
+                GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, KnifeLeftDirection)));
+                tmp.GetComponent<Knife>().Initialize(Vector2.left);
+                GameManager.Instance.CollectedKnifes--;
+            }
         }
     }
 

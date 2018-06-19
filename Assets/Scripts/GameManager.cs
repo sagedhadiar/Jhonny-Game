@@ -16,6 +16,14 @@ public class GameManager : MonoBehaviour {
 
     private int collectedCoins;
 
+    [SerializeField]
+    private GameObject knifePrefab;
+
+    [SerializeField]
+    private Text knifeText;
+
+    private int collectedknife;
+
     public int CollectedCoins {
         get {
             return collectedCoins;
@@ -42,6 +50,39 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public int CollectedKnifes
+    {
+        get
+        {
+            return collectedknife;
+        }
+        set
+        {
+            knifeText.text = value.ToString();
+            this.collectedknife = value;
+        }
+    }
+
+    public Text KnifeText
+    {
+        get
+        {
+            return knifeText;
+        }
+        set
+        {
+            this.knifeText = value;
+        }
+    }
+
+    public GameObject KnifePrefab
+    {
+        get
+        {
+            return knifePrefab;
+        }
+    }
+
     public static GameManager Instance {
         get {
             if (instance == null)
@@ -50,10 +91,17 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    [SerializeField]
+    private int numberThrow;
+
     // Use this for initialization
     void Start () {
-		
-	}
+
+        collectedknife = numberThrow;
+        knifeText.text = numberThrow.ToString();
+        
+
+    }
 	
 	// Update is called once per frame
 	void Update () {

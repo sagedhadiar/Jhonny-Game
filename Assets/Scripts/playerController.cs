@@ -106,6 +106,9 @@ public class PlayerController : CharacterController {
     [SerializeField]
     private Rigidbody2D healthBody;
 
+    [SerializeField]
+    private int decPlayerDamage;
+
     // Use this for initialization
     public override void Start () {
         base.Start();
@@ -264,7 +267,7 @@ public class PlayerController : CharacterController {
             MyAnimator.SetTrigger("slide");
         }
 
-        if (Input.GetKeyDown(KeyCode.V)) {
+        if (Input.GetKeyDown(KeyCode.V) && GameManager.Instance.CollectedKnifes != 0) {
             MyAnimator.SetTrigger("throw");
         }
 
@@ -333,7 +336,7 @@ public class PlayerController : CharacterController {
     public override IEnumerator TakeDamage() {
 
         if (!immortal) {
-            healthStat.CurrentVal -= 10;
+            healthStat.CurrentVal -= decPlayerDamage;
 
             if (!IsDead)  {
                 MyAnimator.SetTrigger("damage");
@@ -380,7 +383,8 @@ public class PlayerController : CharacterController {
         MyAnimator.SetTrigger("attack");
     }
     public void BtnThrow() {
-        MyAnimator.SetTrigger("throw"); 
+        if(GameManager.Instance.CollectedKnifes != 0)
+            MyAnimator.SetTrigger("throw"); 
     }
     public void BtnSlide() {
         if(MyRigidBody.velocity != Vector2.zero)
@@ -416,6 +420,12 @@ public class PlayerController : CharacterController {
     private void OnCollisionEnter2D(Collision2D other) {
         if(other.gameObject.tag == "Coin")  {
             GameManager.Instance.CollectedCoins++;
+            Destroy(other.gameObject);
+        }
+
+        if (other.gameObject.tag == "KnifeCollect")
+        {
+            GameManager.Instance.CollectedKnifes++;
             Destroy(other.gameObject);
         }
 

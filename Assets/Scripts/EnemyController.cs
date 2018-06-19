@@ -31,6 +31,9 @@ public class EnemyController : CharacterController {
 
     private bool dropItem = true;
 
+    [SerializeField]
+    private int decEnemyDamage;
+
     //Indicates if the enemy is in melee range
     public bool InMeleeRange {
         get {
@@ -197,7 +200,7 @@ public class EnemyController : CharacterController {
         }
 
         //Reduces the health
-        healthStat.CurrentVal -= 10;
+        healthStat.CurrentVal -= decEnemyDamage;
 
         //if the enemy is not dead then play the enemy-damage animation
         if (!IsDead) {

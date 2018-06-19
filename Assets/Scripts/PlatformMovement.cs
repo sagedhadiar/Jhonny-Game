@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PlatformMovement : MonoBehaviour {
 
     //Initially our current position
-    private Vector3 currentPos;
+    //private Vector3 currentPos;
 
     private Vector3 posA;
 
@@ -54,7 +54,7 @@ public class PlatformMovement : MonoBehaviour {
     void Start () {
 
         //myEnum.Item1 = "v";
-        currentPos = childTransform.localPosition;
+        //currentPos = childTransform.localPosition;
 
         posA = moveDirection.ToString() == "Vertical" ? new Vector3(transform.localPosition.x, yMax) : moveDirection.ToString() == "Horizontal" ? new Vector3(xMax, transform.localPosition.y) : new Vector3(xMax, yMax);
 
