@@ -53,6 +53,8 @@ public abstract class CharacterController : MonoBehaviour {
     //Give the left position <--
     private int KnifeLeftDirection;
 
+ 
+
     //Property for getting the swordCollider
     public EdgeCollider2D SwordCollider {
         get {
@@ -81,6 +83,8 @@ public abstract class CharacterController : MonoBehaviour {
 
         healthStat.Initialize();
 
+     
+
         collidersss = new List<string>();
     }
 
@@ -88,6 +92,7 @@ public abstract class CharacterController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        
     }
 
     //Changes the characters direction
@@ -131,9 +136,13 @@ public abstract class CharacterController : MonoBehaviour {
 
             StartCoroutine(TakeDamage());
         }
+
+      
     }
 
-   
+    
+
+
 
 
 

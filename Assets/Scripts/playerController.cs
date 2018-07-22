@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public delegate void DeadEventHandler();
 public class PlayerController : CharacterController {
@@ -66,6 +67,12 @@ public class PlayerController : CharacterController {
     public bool Jump { get; set; }
     public bool OnGround { get; set; }
 
+    private int waitLoadScene;
+
+    private bool winGame;
+
+    private bool diedDeacreaseHealth;
+
     public override bool IsDead {
         get
         {
@@ -109,8 +116,25 @@ public class PlayerController : CharacterController {
     [SerializeField]
     private int decPlayerDamage;
 
+    [SerializeField]
+    private GameObject endCube;
+
+    [SerializeField]
+    private float distance;
+
+    //Character's Distance
+    [SerializeField]
+    private DistanceStat distStat;
+
+    [SerializeField]
+    private Text winText;
+
+    [SerializeField]
+    private Collider2D[] blockPoints;
+
     // Use this for initialization
     public override void Start () {
+
         base.Start();
 
         OnLadder = false;
@@ -124,13 +148,51 @@ public class PlayerController : CharacterController {
         //Reference to myrigidBody of the player
         MyRigidBody = GetComponent<Rigidbody2D>();
 
+
+        distStat.Initialize();
+        distStat.CurrentVal = Vector3.Distance(transform.position, endCube.transform.position);
+
         //Collider with the HealthCoin
-        
+
         healthCollider.isTrigger = true;
         healthBody.gravityScale = 0;
     }
 
     void Update(){
+        
+        distance = Vector3.Distance(transform.position, endCube.transform.position);
+        distStat.CurrentVal = convertDistance(distance);
+
+        if(winGame == true)
+        {
+            Time.timeScale = 0f;
+            winText.text = "Win Game";
+            waitLoadScene++;
+            if (waitLoadScene > 60)
+                if (SceneManager.GetActiveScene().name.Equals("animationScene"))
+
+                    SceneManager.LoadScene("Menu");
+
+        }
+        else if(!GameManager.Instance.IsGamePaused)
+        {
+            Time.timeScale = 1f;
+        }
+
+        if(GameManager.Instance.NumberOfHealth == 0)
+        {
+            Time.timeScale = 0f;
+            winText.text = "GameOver";
+            waitLoadScene++;
+            if (waitLoadScene > 60)
+                if (SceneManager.GetActiveScene().name.Equals("animationScene"))
+
+                    SceneManager.LoadScene("Menu");
+        }
+        else if (!GameManager.Instance.IsGamePaused)
+        {
+            Time.timeScale = 1f;
+        }
 
         if (healthCollider != null) {
 
@@ -150,7 +212,8 @@ public class PlayerController : CharacterController {
         //after death the player can not move
         if (!TakingDamage && !IsDead) {
 
-            if (transform.position.y <= -25f)  { 
+            if (transform.position.y <= -25f&& GameManager.Instance.NumberOfHealth != 0)  {
+                diedDeacreaseHealth = true;
                 Death();
             }
 
@@ -231,6 +294,7 @@ public class PlayerController : CharacterController {
                 extraJumpValue = extraJump;
         }
 
+
         if (!Attack && !Slide && (OnGround || airControl)){
             MyRigidBody.velocity = new Vector2(horizontal * movementSpeed, MyRigidBody.velocity.y);
         }
@@ -262,7 +326,8 @@ public class PlayerController : CharacterController {
             MyAnimator.SetTrigger("attack");
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) && MyRigidBody.velocity != Vector2.zero)
+        //if (Input.GetKeyDown(KeyCode.LeftControl) && MyRigidBody.velocity != Vector2.zero)
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             MyAnimator.SetTrigger("slide");
         }
@@ -352,19 +417,30 @@ public class PlayerController : CharacterController {
             else {
                 MyAnimator.SetLayerWeight(1, 0);
                 MyAnimator.SetTrigger("death");
+                diedDeacreaseHealth = true;
             }
         }
     }
 
     public override void Death() {
+        
+            MyRigidBody.velocity = Vector2.zero;
 
-        MyRigidBody.velocity = Vector2.zero; 
+            MyAnimator.SetTrigger("idle");
 
-        MyAnimator.SetTrigger("idle");
+            healthStat.CurrentVal = healthStat.MaxVal;
 
-        healthStat.CurrentVal = healthStat.MaxVal;
+            if (diedDeacreaseHealth == true)
+            {
+                GameManager.Instance.NumberOfHealth--;
+            }
 
-        transform.position = startPos;
+            diedDeacreaseHealth = false;
+
+            if (GameManager.Instance.NumberOfHealth != 0)
+            {
+                transform.position = startPos;
+            }
     }
 
     private void Use() {
@@ -387,7 +463,7 @@ public class PlayerController : CharacterController {
             MyAnimator.SetTrigger("throw"); 
     }
     public void BtnSlide() {
-        if(MyRigidBody.velocity != Vector2.zero)
+       // if(MyRigidBody.velocity != Vector2.zero)
             MyAnimator.SetTrigger("slide");
     }
     public void BtnMove(float direction) {
@@ -457,6 +533,41 @@ public class PlayerController : CharacterController {
         }
         collidersss.Add(other.tag);
         base.OnTriggerEnter2D(other);
+
+        if (other.tag == "BoxCollider")
+        {
+            winGame = true;
+        }
+        else
+        {
+            winGame = false;
+        }
+
+        if(other.tag == "CheckPoint1")
+        {
+            startPos = transform.position;
+            for(int i=0; i<blockPoints.Length; i++)
+            {
+                if (blockPoints[i].tag.Equals("BlockPoint1"))
+                {
+                    blockPoints[i].isTrigger = false;
+                }
+            }
+        }
+
+        if (other.tag == "CheckPoint")
+        {
+            startPos = transform.position;
+
+            for (int i = 0; i < blockPoints.Length; i++)
+            {
+                if (blockPoints[i].tag.Equals("BlockPoint"))
+                {
+                    blockPoints[i].isTrigger = false;
+                }
+            }
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D other) {
@@ -488,6 +599,11 @@ public class PlayerController : CharacterController {
 
         //Call the flip method
         Flip(direction);
+    }
+
+    public float convertDistance(float currentDistance)
+    {
+        return (currentDistance * 100) / (float)714.5938;
     }
 
 

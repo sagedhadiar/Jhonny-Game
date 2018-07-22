@@ -25,6 +25,43 @@ public class GameManager : MonoBehaviour {
 
     private int collectedknife;
 
+    [SerializeField]
+    private Text enemyText;
+
+    [SerializeField]
+    private int collectedEnemyKilled;
+
+    [SerializeField]
+    private Text numberOfHealthText;
+
+    private int numberOfHealth;
+
+    public int NumberOfHealth
+    {
+        get
+        {
+            return numberOfHealth;
+        }
+        set
+        {
+            numberOfHealthText.text = value.ToString();
+            this.numberOfHealth = value;
+        }
+    }
+    public int CollectedEnemyKilled
+    {
+        get
+        {
+            return collectedEnemyKilled;
+        }
+        set
+        {
+            EnemyText.text = value.ToString();
+            this.collectedEnemyKilled = value;
+        }
+    }
+
+
     public int CollectedCoins {
         get {
             return collectedCoins;
@@ -41,6 +78,18 @@ public class GameManager : MonoBehaviour {
         }
         set {
             this.cointText = value;
+        }
+    }
+
+    public Text EnemyText
+    {
+        get
+        {
+            return enemyText;
+        }
+        set
+        {
+            this.enemyText = value;
         }
     }
 
@@ -95,12 +144,32 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private int numberThrow;
 
+    private bool isGamePaused;
+
+    public bool IsGamePaused
+    {
+        get
+        {
+            return isGamePaused;
+        }
+        set
+        {
+            this.isGamePaused = value;
+        }
+    }
+
     // Use this for initialization
     void Start () {
+        collectedEnemyKilled = 4;
+        enemyText.text = collectedEnemyKilled.ToString();
 
         collectedknife = numberThrow;
         knifeText.text = numberThrow.ToString();
-        
+
+        numberOfHealth = 3;
+        numberOfHealthText.text = numberThrow.ToString();
+
+        isGamePaused = false;
 
     }
 	
@@ -111,11 +180,13 @@ public class GameManager : MonoBehaviour {
 
     public void PauseGame()
     {
+        isGamePaused = true;
         Time.timeScale = 0f;
     }
 
     public void ResumeGame()
     {
+        isGamePaused = false;
         Time.timeScale = 1f;
     }
 }

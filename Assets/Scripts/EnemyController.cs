@@ -209,12 +209,14 @@ public class EnemyController : CharacterController {
         //If the enemy is dead then make sure that we play the dead animation 
         else {
 
+            
             if (dropItem)  {
                 GameObject coin = Instantiate(GameManager.Instance.CoinPrefab, new Vector3(transform.position.x, transform.position.y + 2), Quaternion.identity);
                 Physics2D.IgnoreCollision(coin.GetComponent<Collider2D>(), GetComponent<Collider2D>());
                 dropItem = false;
             }
             MyAnimator.SetTrigger("death");
+            GameManager.Instance.CollectedEnemyKilled--;
             yield return null;
 
         }
