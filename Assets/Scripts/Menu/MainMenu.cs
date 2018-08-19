@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+using System;
 
 public class MainMenu : MonoBehaviour {
 
@@ -16,6 +18,8 @@ public class MainMenu : MonoBehaviour {
     public GameObject options;
     public GameObject quit;
 
+    string url; 
+
     public AudioMixer audioMixer;
 	// Use this for initialization
 	void Start () {
@@ -23,7 +27,7 @@ public class MainMenu : MonoBehaviour {
         sliderBar.gameObject.SetActive(false);
 
         play.SetActive(true);
-        options.SetActive(true);
+        options.SetActive(false);
         quit.SetActive(true);
 
     }
@@ -38,10 +42,35 @@ public class MainMenu : MonoBehaviour {
         options.SetActive(false);
         quit.SetActive(false);
         updateLoadScene();
+        //StartCoroutine(Upload());
     }
 
     public void QuitGame() {
         Application.Quit();
+    }
+
+    IEnumerator Upload()
+    {
+    
+        WWWForm formData = new WWWForm();
+        formData.AddField("userName", "ahmad");
+        formData.AddField("userLastName", "haidar");
+        formData.AddField("userGender", "10");
+        formData.AddField("userLocation", "beirut");
+        formData.AddField("userNationality", "lebanese");
+        formData.AddField("userPassword", "123");
+
+        UnityWebRequest www = UnityWebRequest.Post("http://localhost:99/api/Users/AddUser", formData);
+        yield return www.Send();
+
+        if (www.isError )
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Debug.Log("Form upload complete!");
+        }
     }
 
     public void SetVolume(float volume) {

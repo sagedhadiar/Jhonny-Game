@@ -168,10 +168,10 @@ public class PlayerController : CharacterController {
             Time.timeScale = 0f;
             winText.text = "Win Game";
             waitLoadScene++;
-            if (waitLoadScene > 60)
-                if (SceneManager.GetActiveScene().name.Equals("animationScene"))
+            //if (waitLoadScene > 60)
+            //    if (SceneManager.GetActiveScene().name.Equals("animationScene"))
 
-                    SceneManager.LoadScene("Menu");
+            //        SceneManager.LoadScene("Menu");
 
         }
         else if(!GameManager.Instance.IsGamePaused)
@@ -603,7 +603,7 @@ public class PlayerController : CharacterController {
 
     public float convertDistance(float currentDistance)
     {
-        return (currentDistance * 100) / (float)714.5938;
+        return ((currentDistance * 100) / (float)717.4636);
     }
 
 
