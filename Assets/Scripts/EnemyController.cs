@@ -34,6 +34,7 @@ public class EnemyController : CharacterController {
     [SerializeField]
     private int decEnemyDamage;
 
+
     //Indicates if the enemy is in melee range
     public bool InMeleeRange {
         get {
@@ -192,6 +193,14 @@ public class EnemyController : CharacterController {
         currentState.OnTriggerEnter(other);
     }
 
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Coin")
+        {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), other.collider, true);
+        }
+    }
+
     //Makes the enemy takes damage
     public override IEnumerator TakeDamage() {
 
@@ -225,6 +234,11 @@ public class EnemyController : CharacterController {
     public override void Death() {
         Destroy(gameObject);
     }
+
+    //private void Awake()
+    //{
+    //    Physics2D.IgnoreCollision(GetComponent<Collider2D>(), other, true);
+    //}
 
     //Removes the enemy from the game
     //If we want to make the enemy respawn after a certain of time we can call this method instead of the upper method

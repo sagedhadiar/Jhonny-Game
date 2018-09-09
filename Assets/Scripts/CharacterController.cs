@@ -113,13 +113,13 @@ public abstract class CharacterController : MonoBehaviour {
             {
                 GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, KnifeRightDirection)));
                 tmp.GetComponent<Knife>().Initialize(Vector2.right);
-                GameManager.Instance.CollectedKnifes--;
+                //GameManager.Instance.CollectedKnifes--;
             }
             else
             {
                 GameObject tmp = (GameObject)Instantiate(KnifePrefab, KnifePos.position, Quaternion.Euler(new Vector3(0, 0, KnifeLeftDirection)));
                 tmp.GetComponent<Knife>().Initialize(Vector2.left);
-                GameManager.Instance.CollectedKnifes--;
+                //GameManager.Instance.CollectedKnifes--;
             }
         }
     }

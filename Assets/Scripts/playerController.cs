@@ -72,6 +72,8 @@ public class PlayerController : CharacterController {
     private bool winGame;
 
     private bool diedDeacreaseHealth;
+    
+    private static string distanceToScore;
 
     public override bool IsDead {
         get
@@ -137,6 +139,8 @@ public class PlayerController : CharacterController {
 
         base.Start();
 
+        distanceToScore = distance.ToString();
+
         OnLadder = false;
 
         extraJumpValue = extraJump;
@@ -160,28 +164,31 @@ public class PlayerController : CharacterController {
 
     void Update(){
         
-        distance = Vector3.Distance(transform.position, endCube.transform.position);
+        distance= Vector3.Distance(transform.position, endCube.transform.position);
         distStat.CurrentVal = convertDistance(distance);
 
         if(winGame == true)
         {
-            Time.timeScale = 0f;
+            
             winText.text = "Win Game";
             waitLoadScene++;
-            //if (waitLoadScene > 60)
-            //    if (SceneManager.GetActiveScene().name.Equals("animationScene"))
+            GameManager.Instance.PauseGame();
+            Score.Instance.sendSore();
+            //Time.timeScale = 0f;
+            if (waitLoadScene > 60)
+                if (SceneManager.GetActiveScene().name.Equals("animationScene"))
 
-            //        SceneManager.LoadScene("Menu");
+                    SceneManager.LoadScene("Menu");
 
         }
         else if(!GameManager.Instance.IsGamePaused)
         {
-            Time.timeScale = 1f;
+            GameManager.Instance.ResumeGame();
         }
 
         if(GameManager.Instance.NumberOfHealth == 0)
         {
-            Time.timeScale = 0f;
+            GameManager.Instance.PauseGame();
             winText.text = "GameOver";
             waitLoadScene++;
             if (waitLoadScene > 60)
@@ -191,20 +198,20 @@ public class PlayerController : CharacterController {
         }
         else if (!GameManager.Instance.IsGamePaused)
         {
-            Time.timeScale = 1f;
+            GameManager.Instance.ResumeGame();
         }
 
         if (healthCollider != null) {
 
-            if (healthStat.CurrentVal == healthStat.MaxVal) {
-                healthCollider.isTrigger = true;
-                healthBody.gravityScale = 0;
-            }
-            else
-            {
+            //if (healthStat.CurrentVal == healthStat.MaxVal) {
+            //    healthCollider.isTrigger = true;
+            //    healthBody.gravityScale = 0;
+            //}
+            //else
+            //{
                 healthCollider.isTrigger = false;
-                healthBody.gravityScale = 1;
-            }
+                healthBody.gravityScale = 0;
+            //}
         }
 
         StayCollliding();
@@ -212,7 +219,7 @@ public class PlayerController : CharacterController {
         //after death the player can not move
         if (!TakingDamage && !IsDead) {
 
-            if (transform.position.y <= -25f&& GameManager.Instance.NumberOfHealth != 0)  {
+            if (transform.position.y <= -25f && GameManager.Instance.NumberOfHealth != 0)  {
                 diedDeacreaseHealth = true;
                 Death();
             }
@@ -376,6 +383,19 @@ public class PlayerController : CharacterController {
     public override void ThrowKnife(int value){
         if (!OnGround && value == 1 || OnGround && value == 0){
             base.ThrowKnife(value);
+
+            if (GameManager.Instance.CollectedKnifes != 0)
+            {
+                //If we are facing right then throw the knife to the right
+                if (facingRight)
+                {
+                    GameManager.Instance.CollectedKnifes--;
+                }
+                else
+                {
+                    GameManager.Instance.CollectedKnifes--;
+                }
+            }
         }
     }
 
@@ -495,6 +515,7 @@ public class PlayerController : CharacterController {
 
     private void OnCollisionEnter2D(Collision2D other) {
         if(other.gameObject.tag == "Coin")  {
+       
             GameManager.Instance.CollectedCoins++;
             Destroy(other.gameObject);
         }
@@ -506,15 +527,16 @@ public class PlayerController : CharacterController {
         }
 
 
-        if (other.gameObject.tag == "Health" && healthStat.CurrentVal != healthStat.MaxVal) {
-            healthStat.CurrentVal += 5;
+        if (other.gameObject.tag == "Health" ) {
+            //healthStat.CurrentVal += 5;
+            GameManager.Instance.NumberOfHealth++;
             healthCollider = null;
             Destroy(other.gameObject);
         }
-        else if (other.gameObject.tag == "Health" && healthStat.CurrentVal == healthStat.MaxVal) {
-            other.collider.isTrigger = true;
-            other.rigidbody.gravityScale = 0;
-        }
+        //else if (other.gameObject.tag == "Health" && healthStat.CurrentVal == healthStat.MaxVal) {
+        //    other.collider.isTrigger = true;
+        //    other.rigidbody.gravityScale = 0;
+        //}
 
         if (other.gameObject.tag == "MediumPlatform") {
             onMediumPlatform = true;
@@ -606,5 +628,9 @@ public class PlayerController : CharacterController {
         return ((currentDistance * 100) / (float)717.4636);
     }
 
+    public static string getDistanceToScore()
+    {
+        return distanceToScore;
+    }
 
 }
